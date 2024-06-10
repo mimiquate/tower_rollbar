@@ -40,7 +40,7 @@ defmodule TowerRollbar.Rollbar.Item do
     }
   end
 
-  defp maybe_put_level(item, level) when is_atom(level) do
+  defp maybe_put_level(item, level) when is_atom(level) and level != nil do
     item
     |> Map.put("level", Atom.to_string(level))
   end
