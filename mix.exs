@@ -21,12 +21,9 @@ defmodule TowerRollbar.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:jason, "~> 1.4"},
       {:tower, github: "mimiquate/tower"},
-      {:plug, "~> 1.16"},
-
-      # Included only for Rollbax.Client for now.
-      # Consider implementing our own client?
-      {:rollbax, "~> 0.11.0"}
+      {:plug, "~> 1.16"}
     ]
   end
 end

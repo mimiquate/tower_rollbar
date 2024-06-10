@@ -1,62 +1,41 @@
 defmodule TowerRollbar.Reporter do
   @behaviour Tower.Reporter
 
+  alias TowerRollbar.Rollbar
+
   @impl true
-  def report_exception(exception, stacktrace, metadata \\ %{}) when is_exception(exception) and is_list(stacktrace) do
-    Rollbax.Client.emit(
-      :error,
-      :os.system_time(:second),
-      %{
-        "trace" => %{
-          # "frames" => trace_frames(stacktrace),
-          "exception" => %{
-            "class" => inspect(exception.__struct__),
-            "message" => Exception.message(exception)
-          }
-        }
-      },
-      custom_data(metadata),
-      occurrence_data(metadata)
-    )
+  def report_exception(exception, stacktrace, metadata \\ %{})
+      when is_exception(exception) and is_list(stacktrace) do
+    if enabled?() do
+      Rollbar.Client.post(
+        "/item",
+        Rollbar.Item.from_exception(exception, stacktrace, plug_conn: plug_conn(metadata))
+      )
+    else
+      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+    end
   end
 
-  defp custom_data(%{pid: pid, mfa: {m, f, arity}}) do
-    %{
-      name: pid,
-      function: inspect(Function.capture(m, f, arity))
-    }
+  def report_message(message, options \\ []) when is_binary(message) do
+    if enabled?() do
+      Rollbar.Client.post(
+        "/item",
+        Rollbar.Item.from_message(message, options)
+      )
+    else
+      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+    end
   end
 
-  defp custom_data(_) do
-    %{}
+  defp plug_conn(%{conn: conn}) do
+    conn
   end
 
-  defp occurrence_data(%{conn: conn}) do
-    conn =
-      conn
-      |> Plug.Conn.fetch_cookies()
-      |> Plug.Conn.fetch_query_params()
-
-    %{
-      "request" => %{
-        "cookies" => conn.req_cookies,
-        "url" => "#{conn.scheme}://#{conn.host}:#{conn.port}#{conn.request_path}",
-        "user_ip" => conn.remote_ip |> :inet.ntoa() |> List.to_string(),
-        "headers" => conn.req_headers |> Enum.into(%{}),
-        "method" => conn.method,
-        "params" =>
-          case conn.params do
-            %Plug.Conn.Unfetched{aspect: :params} -> "unfetched"
-            other -> other
-          end
-      },
-      "person" => %{
-        "id" => conn.assigns[:user_id]
-      }
-    }
+  defp plug_conn(_) do
+    nil
   end
 
-  defp occurrence_data(_) do
-    %{}
+  defp enabled? do
+    Application.get_env(:tower_rollbar, :enabled, false)
   end
 end
