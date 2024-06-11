@@ -22,7 +22,28 @@ defmodule TowerRollbar.Rollbar.ItemTest do
                "level" => "error",
                "body" => %{
                  "trace" => %{
-                   "frames" => [],
+                   "frames" => [
+                     %{
+                       "method" => _,
+                       "filename" => "lib/ex_unit/runner.ex",
+                       "lineno" => _
+                     },
+                     %{
+                       "method" => _,
+                       "filename" => "timer.erl",
+                       "lineno" => _
+                     },
+                     %{
+                       "method" => _,
+                       "filename" => "lib/ex_unit/runner.ex",
+                       "lineno" => _
+                     },
+                     %{
+                       "method" => ~s(TowerRollbar.Rollbar.ItemTest."test from_exception"/1),
+                       "filename" => "test/tower_rollbar/rollbar/item_test.exs",
+                       "lineno" => 12
+                     }
+                   ],
                    "exception" => %{
                      "class" => "RuntimeError",
                      "message" => "a test"

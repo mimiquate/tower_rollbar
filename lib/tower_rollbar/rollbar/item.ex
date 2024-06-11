@@ -98,9 +98,27 @@ defmodule TowerRollbar.Rollbar.Item do
     }
   end
 
-  defp frames(_stacktrace) do
-    # TODO: implement
-    []
+  defp frames(stacktrace) do
+    stacktrace
+    |> Enum.map(fn {m, f, a, location} ->
+      frame = %{
+        "method" => Exception.format_mfa(m, f, a)
+      }
+
+      frame =
+        if location[:file] do
+          Map.put(frame, "filename", to_string(location[:file]))
+        else
+          frame
+        end
+
+      if location[:line] do
+        Map.put(frame, "lineno", location[:line])
+      else
+        frame
+      end
+    end)
+    |> Enum.reverse()
   end
 
   defp environment do
