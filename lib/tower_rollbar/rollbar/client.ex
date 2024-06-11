@@ -13,6 +13,7 @@ defmodule TowerRollbar.Rollbar.Client do
            },
            [
              ssl: [
+               verify: :verify_peer,
                cacerts: :public_key.cacerts_get()
              ]
            ],
