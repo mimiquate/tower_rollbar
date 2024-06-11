@@ -19,7 +19,7 @@ defmodule TowerRollbar.Rollbar.Item do
         "body" => message
       }
     }
-    |> item_from_body(options)
+    |> item_from_body(Keyword.merge([level: :info], options))
   end
 
   defp item_from_body(body, options) when is_map(body) do

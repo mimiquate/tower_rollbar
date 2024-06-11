@@ -32,4 +32,23 @@ defmodule TowerRollbar.Rollbar.ItemTest do
       }
     } = item
   end
+
+  test "from_message" do
+    Application.put_env(:tower_rollbar, :environment, "test")
+
+    item = Rollbar.Item.from_message("something interesting happened")
+
+    assert %{
+      "data" => %{
+        "environment" => "test",
+        "timestamp" => _,
+        "level" => "info",
+        "body" => %{
+          "message" => %{
+            "body" => "something interesting happened"
+          }
+        }
+      }
+    } = item
+  end
 end
