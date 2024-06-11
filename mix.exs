@@ -10,7 +10,7 @@ defmodule TowerRollbar.MixProject do
       app: :tower_rollbar,
       description: @description,
       version: @version,
-      elixir: "~> 1.15",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
@@ -25,7 +25,7 @@ defmodule TowerRollbar.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :public_key]
+      extra_applications: [:logger, :public_key, :inets]
     ]
   end
 
@@ -34,7 +34,10 @@ defmodule TowerRollbar.MixProject do
     [
       {:jason, "~> 1.4"},
       {:tower, github: "mimiquate/tower"},
-      {:plug, "~> 1.16"}
+      {:plug, "~> 1.16"},
+
+      # Only needed for Erlang < 25
+      {:castore, "~> 1.0", optional: true}
     ]
   end
 
