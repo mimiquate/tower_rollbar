@@ -12,10 +12,7 @@ defmodule TowerRollbar.Rollbar.Client do
              Jason.encode!(payload)
            },
            [
-             ssl: [
-               verify: :verify_peer,
-               cacerts: :public_key.cacerts_get()
-             ]
+             ssl: tls_client_options()
            ],
            []
          ) do
@@ -26,6 +23,24 @@ defmodule TowerRollbar.Rollbar.Client do
       {:error, reason} ->
         reason
         |> IO.inspect()
+    end
+  end
+
+  if function_exported?(:public_key, :cacerts_get, 0) do
+    # Included in Erlang 25+
+    defp tls_client_options do
+      [
+        verify: :verify_peer,
+        cacerts: :public_key.cacerts_get()
+      ]
+    end
+  else
+    # Support Erlang < 25
+    defp tls_client_options do
+      [
+        verify: :verify_peer,
+        cacertfile: CAStore.file_path()
+      ]
     end
   end
 
