@@ -16,21 +16,21 @@ defmodule TowerRollbar.Rollbar.ItemTest do
       end
 
     assert %{
-      "data" => %{
-        "environment" => "test",
-        "timestamp" => _,
-        "level" => "error",
-        "body" => %{
-          "trace" => %{
-            "frames" => [],
-            "exception" => %{
-              "class" => "RuntimeError",
-              "message" => "a test"
-            }
-          }
-        }
-      }
-    } = item
+             "data" => %{
+               "environment" => "test",
+               "timestamp" => _,
+               "level" => "error",
+               "body" => %{
+                 "trace" => %{
+                   "frames" => [],
+                   "exception" => %{
+                     "class" => "RuntimeError",
+                     "message" => "a test"
+                   }
+                 }
+               }
+             }
+           } = item
   end
 
   test "from_message" do
@@ -39,16 +39,16 @@ defmodule TowerRollbar.Rollbar.ItemTest do
     item = Rollbar.Item.from_message("something interesting happened")
 
     assert %{
-      "data" => %{
-        "environment" => "test",
-        "timestamp" => _,
-        "level" => "info",
-        "body" => %{
-          "message" => %{
-            "body" => "something interesting happened"
-          }
-        }
-      }
-    } = item
+             "data" => %{
+               "environment" => "test",
+               "timestamp" => _,
+               "level" => "info",
+               "body" => %{
+                 "message" => %{
+                   "body" => "something interesting happened"
+                 }
+               }
+             }
+           } = item
   end
 end
