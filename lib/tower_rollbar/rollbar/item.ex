@@ -29,15 +29,16 @@ defmodule TowerRollbar.Rollbar.Item do
     person = Keyword.get(options, :person)
 
     %{
-      "data" => %{
-        "environment" => environment(),
-        "timestamp" => :os.system_time(:second),
-        "body" => body
-      }
-      |> maybe_put_request_data(plug_conn)
-      |> maybe_put_level(level)
-      |> maybe_put_custom(custom)
-      |> maybe_put_person(person)
+      "data" =>
+        %{
+          "environment" => environment(),
+          "timestamp" => :os.system_time(:second),
+          "body" => body
+        }
+        |> maybe_put_request_data(plug_conn)
+        |> maybe_put_level(level)
+        |> maybe_put_custom(custom)
+        |> maybe_put_person(person)
     }
   end
 
