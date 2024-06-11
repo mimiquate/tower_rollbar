@@ -10,7 +10,7 @@ defmodule TowerRollbar.Rollbar.Item do
         }
       }
     }
-    |> item_from_body(options)
+    |> item_from_body(Keyword.merge([level: :error], options))
   end
 
   def from_message(message, options \\ []) when is_binary(message) do
@@ -19,7 +19,7 @@ defmodule TowerRollbar.Rollbar.Item do
         "body" => message
       }
     }
-    |> item_from_body(options)
+    |> item_from_body(Keyword.merge([level: :info], options))
   end
 
   defp item_from_body(body, options) when is_map(body) do
@@ -32,6 +32,7 @@ defmodule TowerRollbar.Rollbar.Item do
       "data" =>
         %{
           "environment" => environment(),
+          "timestamp" => :os.system_time(:second),
           "body" => body
         }
         |> maybe_put_request_data(plug_conn)
