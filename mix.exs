@@ -1,13 +1,24 @@
 defmodule TowerRollbar.MixProject do
   use Mix.Project
 
+  @description "Error and message reporting to Rollbar"
+  @source_url "https://github.com/mimiquate/tower_rollbar"
+  @version "0.1.0"
+
   def project do
     [
       app: :tower_rollbar,
-      version: "0.1.0",
+      description: @description,
+      version: @version,
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+
+      # Docs
+      name: "TowerRollbar",
+      source_url: @source_url,
+      docs: docs()
     ]
   end
 
@@ -24,6 +35,21 @@ defmodule TowerRollbar.MixProject do
       {:jason, "~> 1.4"},
       {:tower, github: "mimiquate/tower"},
       {:plug, "~> 1.16"}
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["Apache-2.0"],
+      links: %{
+        "GitHub" => @source_url
+      }
+    ]
+  end
+
+  defp docs do
+    [
+      extras: ["README.md"]
     ]
   end
 end
