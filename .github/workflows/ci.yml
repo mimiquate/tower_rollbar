@@ -16,6 +16,8 @@ jobs:
           - elixir: '1.16'
             erlang: '26.2.5'
             lint: true
+          - elixir: '1.15'
+            erlang: '25.3.2.12'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
