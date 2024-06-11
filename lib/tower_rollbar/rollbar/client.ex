@@ -26,22 +26,25 @@ defmodule TowerRollbar.Rollbar.Client do
     end
   end
 
-  if function_exported?(:public_key, :cacerts_get, 0) do
-    # Included in Erlang 25+
-    defp tls_client_options do
-      [
-        verify: :verify_peer,
-        cacerts: :public_key.cacerts_get()
-      ]
-    end
-  else
-    # Support Erlang < 25
-    defp tls_client_options do
-      [
-        verify: :verify_peer,
-        cacertfile: CAStore.file_path()
-      ]
-    end
+  cond do
+    function_exported?(:public_key, :cacerts_get, 0) ->
+      # Included in Erlang 25+
+      defp tls_client_options do
+        [
+          verify: :verify_peer,
+          cacerts: :public_key.cacerts_get()
+        ]
+      end
+    Code.ensure_loaded?(CAStore) ->
+      # Support Erlang < 25
+      defp tls_client_options do
+        [
+          verify: :verify_peer,
+          cacertfile: CAStore.file_path()
+        ]
+      end
+    true ->
+      raise "Please include castore package in your dependencies to make tower_rollbar work for Erlang/OTP #{System.otp_release()} or upgrade to Erlang/OTP 25+"
   end
 
   defp access_token do

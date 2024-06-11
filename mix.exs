@@ -35,7 +35,9 @@ defmodule TowerRollbar.MixProject do
       {:jason, "~> 1.4"},
       {:tower, github: "mimiquate/tower"},
       {:plug, "~> 1.16"},
-      {:castore, "~> 1.0"}
+
+      # Only needed for Erlang < 25
+      {:castore, "~> 1.0", optional: true}
     ]
   end
 
