@@ -17,11 +17,11 @@ defmodule TowerRollbar.Reporter do
   end
 
   @impl true
-  def report_term(reason, _metadata \\ %{}) do
+  def report_term(reason, metadata \\ %{}) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
-        Rollbar.Item.from_term(reason)
+        Rollbar.Item.from_term(reason, level: Map.get(metadata, :level))
       )
     else
       IO.puts("Tower.Rollbar NOT enabled, ignoring...")
