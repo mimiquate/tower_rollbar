@@ -1,16 +1,15 @@
 defmodule TowerRollbar.Rollbar.Item do
   def from_exception(exception, stacktrace, options \\ [])
       when is_exception(exception) and is_list(stacktrace) do
-    %{
-      "trace" => %{
-        "frames" => frames(stacktrace),
-        "exception" => %{
-          "class" => inspect(exception.__struct__),
-          "message" => Exception.message(exception)
-        }
-      }
-    }
-    |> item_from_body(Keyword.merge([level: :error], options))
+    trace(inspect(exception.__struct__), Exception.message(exception), stacktrace, options)
+  end
+
+  def from_throw(reason, stacktrace, options \\ []) when is_list(stacktrace) do
+    trace("uncaught throw", reason, stacktrace, options)
+  end
+
+  def from_exit(reason, stacktrace, options \\ []) when is_list(stacktrace) do
+    trace("exit", reason, stacktrace, options)
   end
 
   def from_message(message, options \\ []) when is_binary(message) do
@@ -20,6 +19,19 @@ defmodule TowerRollbar.Rollbar.Item do
       }
     }
     |> item_from_body(Keyword.merge([level: :info], options))
+  end
+
+  defp trace(class, reason, stacktrace, options) do
+    %{
+      "trace" => %{
+        "frames" => frames(stacktrace),
+        "exception" => %{
+          "class" => class,
+          "message" => reason
+        }
+      }
+    }
+    |> item_from_body(Keyword.merge([level: :error], options))
   end
 
   defp item_from_body(body, options) when is_map(body) do

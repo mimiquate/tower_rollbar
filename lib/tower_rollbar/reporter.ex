@@ -16,11 +16,36 @@ defmodule TowerRollbar.Reporter do
     end
   end
 
-  def report_message(message, options \\ []) when is_binary(message) do
+  @impl true
+  def report_throw(reason, stacktrace, metadata \\ %{}) when is_list(stacktrace) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
-        Rollbar.Item.from_message(message, options)
+        Rollbar.Item.from_throw(reason, stacktrace, plug_conn: plug_conn(metadata))
+      )
+    else
+      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+    end
+  end
+
+  @impl true
+  def report_exit(reason, stacktrace, metadata \\ %{}) when is_list(stacktrace) do
+    if enabled?() do
+      Rollbar.Client.post(
+        "/item",
+        Rollbar.Item.from_exit(reason, stacktrace, plug_conn: plug_conn(metadata))
+      )
+    else
+      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+    end
+  end
+
+  @impl true
+  def report_message(level, message, _metadata \\ %{}) when is_binary(message) do
+    if enabled?() do
+      Rollbar.Client.post(
+        "/item",
+        Rollbar.Item.from_message(message, level: level)
       )
     else
       IO.puts("Tower.Rollbar NOT enabled, ignoring...")
