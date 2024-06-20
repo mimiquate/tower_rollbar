@@ -13,6 +13,15 @@ defmodule TowerRollbar.Rollbar.Item do
     |> item_from_body(Keyword.merge([level: :error], options))
   end
 
+  def from_term(reason, options \\ []) do
+    %{
+      "message" => %{
+        "body" => inspect(reason)
+      }
+    }
+    |> item_from_body(Keyword.merge([level: :info], options))
+  end
+
   def from_message(message, options \\ []) when is_binary(message) do
     %{
       "message" => %{

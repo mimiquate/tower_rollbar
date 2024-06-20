@@ -16,6 +16,18 @@ defmodule TowerRollbar.Reporter do
     end
   end
 
+  @impl true
+  def report_term(reason, _metadata \\ %{}) do
+    if enabled?() do
+      Rollbar.Client.post(
+        "/item",
+        Rollbar.Item.from_term(reason)
+      )
+    else
+      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+    end
+  end
+
   def report_message(message, options \\ []) when is_binary(message) do
     if enabled?() do
       Rollbar.Client.post(
