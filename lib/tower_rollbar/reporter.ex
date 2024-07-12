@@ -41,7 +41,9 @@ defmodule TowerRollbar.Reporter do
   end
 
   @impl true
-  def report_message(level, message, _metadata \\ %{}) when is_binary(message) do
+  def report_message(level, message, metadata \\ %{})
+
+  def report_message(level, message, _metadata) when is_binary(message) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
@@ -50,6 +52,10 @@ defmodule TowerRollbar.Reporter do
     else
       IO.puts("Tower.Rollbar NOT enabled, ignoring...")
     end
+  end
+
+  def report_message(level, message, metadata) when is_list(message) or is_map(message) do
+    report_message(level, inspect(message), metadata)
   end
 
   defp plug_conn(%{conn: conn}) do
