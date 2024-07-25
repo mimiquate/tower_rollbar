@@ -3,19 +3,20 @@ defmodule TowerRollbar.Rollbar.Client do
   @access_token_header ~c"X-Rollbar-Access-Token"
 
   def post(path, payload) when is_map(payload) do
-    case :httpc.request(
-           :post,
-           {
-             ~c"#{@base_url}#{path}",
-             [{@access_token_header, access_token()}],
-             ~c"application/json",
-             Jason.encode!(payload)
-           },
-           [
-             ssl: tls_client_options()
-           ],
-           []
-         ) do
+    :httpc.request(
+      :post,
+      {
+        ~c"#{@base_url}#{path}",
+        [{@access_token_header, access_token()}],
+        ~c"application/json",
+        Jason.encode!(payload)
+      },
+      [
+        ssl: tls_client_options()
+      ],
+      []
+    )
+    |> case do
       {:ok, result} ->
         result
         |> IO.inspect()
