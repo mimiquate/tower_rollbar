@@ -4,8 +4,12 @@ defmodule TowerRollbar.Reporter do
   alias TowerRollbar.Rollbar
 
   @impl true
-  def report_exception(exception, stacktrace, metadata \\ %{})
-      when is_exception(exception) and is_list(stacktrace) do
+  def report_event(%Tower.Event{
+        kind: :error,
+        reason: exception,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
@@ -16,8 +20,12 @@ defmodule TowerRollbar.Reporter do
     end
   end
 
-  @impl true
-  def report_throw(reason, stacktrace, metadata \\ %{}) when is_list(stacktrace) do
+  def report_event(%Tower.Event{
+        kind: :throw,
+        reason: reason,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
@@ -28,8 +36,12 @@ defmodule TowerRollbar.Reporter do
     end
   end
 
-  @impl true
-  def report_exit(reason, stacktrace, metadata \\ %{}) when is_list(stacktrace) do
+  def report_event(%Tower.Event{
+        kind: :exit,
+        reason: reason,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
@@ -41,9 +53,7 @@ defmodule TowerRollbar.Reporter do
   end
 
   @impl true
-  def report_message(level, message, metadata \\ %{})
-
-  def report_message(level, message, _metadata) when is_binary(message) do
+  def report_event(%Tower.Event{kind: :message, level: level, reason: message}) do
     if enabled?() do
       Rollbar.Client.post(
         "/item",
@@ -54,11 +64,7 @@ defmodule TowerRollbar.Reporter do
     end
   end
 
-  def report_message(level, message, metadata) when is_list(message) or is_map(message) do
-    report_message(level, inspect(message), metadata)
-  end
-
-  defp plug_conn(%{conn: conn}) do
+  defp plug_conn(%{log_event: %{meta: %{conn: conn}}}) do
     conn
   end
 

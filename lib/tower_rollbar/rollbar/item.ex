@@ -12,13 +12,19 @@ defmodule TowerRollbar.Rollbar.Item do
     trace("exit", reason, stacktrace, options)
   end
 
-  def from_message(message, options \\ []) when is_binary(message) do
+  def from_message(message, options \\ [])
+
+  def from_message(message, options) when is_binary(message) do
     %{
       "message" => %{
         "body" => message
       }
     }
     |> item_from_body(Keyword.merge([level: :info], options))
+  end
+
+  def from_message(message, options) when is_list(message) do
+    from_message(inspect(message), options)
   end
 
   defp trace(class, reason, stacktrace, options) do
