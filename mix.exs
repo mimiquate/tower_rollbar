@@ -25,7 +25,10 @@ defmodule TowerRollbar.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :public_key, :inets]
+      extra_applications: [:logger, :public_key, :inets],
+      env: [
+        rollbar_base_url: "https://api.rollbar.com/api/1"
+      ]
     ]
   end
 
@@ -37,7 +40,10 @@ defmodule TowerRollbar.MixProject do
       {:plug, "~> 1.16"},
 
       # Only needed for Erlang < 25
-      {:castore, "~> 1.0", optional: true}
+      {:castore, "~> 1.0", optional: true},
+
+      # Test
+      {:bypass, "~> 2.1"}
     ]
   end
 
