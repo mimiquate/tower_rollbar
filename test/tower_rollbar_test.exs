@@ -42,28 +42,19 @@ defmodule TowerRollbarTest do
                   "class" => "ArithmeticError",
                   "message" => "bad argument in arithmetic expression"
                 },
-                "frames" => [
-                  %{
-                    "method" => _,
-                    "filename" => _,
-                    "lineno" => _
-                  },
-                  %{
-                    "method" => _,
-                    "filename" => _,
-                    "lineno" => _
-                  },
-                  %{
-                    "method" =>
-                      ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error"/1),
-                    "filename" => "test/tower_rollbar_test.exs",
-                    "lineno" => 77
-                  }
-                ]
+                "frames" => frames
               }
             }
           }
         } = Jason.decode!(body)
+      )
+
+      assert(
+        %{
+          "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error"/1),
+          "filename" => "test/tower_rollbar_test.exs",
+          "lineno" => 68
+        } = List.last(frames)
       )
 
       send(parent, {ref, :sent})
