@@ -54,9 +54,10 @@ defmodule TowerRollbarTest do
                     "lineno" => _
                   },
                   %{
-                    "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error"/1),
+                    "method" =>
+                      ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error"/1),
                     "filename" => "test/tower_rollbar_test.exs",
-                    "lineno" => 76
+                    "lineno" => 77
                   }
                 ]
               }
