@@ -18,11 +18,9 @@ defmodule TowerRollbar.Rollbar.Client do
     |> case do
       {:ok, result} ->
         result
-        |> IO.inspect()
 
       {:error, reason} ->
         reason
-        |> IO.inspect()
     end
   end
 
