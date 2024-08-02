@@ -163,7 +163,7 @@ defmodule TowerRollbar.Rollbar.Item do
     [
       plug_conn: plug_conn(metadata),
       custom: metadata,
-      person: %{"id" => Keyword.get(metadata, :user_id, nil)}
+      person: %{"id" => Map.get(metadata, :user_id, nil)}
     ]
   end
 
