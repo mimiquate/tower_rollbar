@@ -6,10 +6,11 @@ defmodule TowerRollbar.Reporter do
   @impl true
   def report_event(%Tower.Event{} = event) do
     if enabled?() do
-      Rollbar.Client.post(
-        "/item",
-        Rollbar.Item.from_event(event)
-      )
+      {:ok, _} =
+        Rollbar.Client.post(
+          "/item",
+          Rollbar.Item.from_event(event)
+        )
     else
       IO.puts("Tower.Rollbar NOT enabled, ignoring...")
     end

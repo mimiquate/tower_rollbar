@@ -15,13 +15,6 @@ defmodule TowerRollbar.Rollbar.Client do
       ],
       []
     )
-    |> case do
-      {:ok, result} ->
-        result
-
-      {:error, reason} ->
-        reason
-    end
   end
 
   cond do
