@@ -162,7 +162,6 @@ defmodule TowerRollbar.Rollbar.Item do
   defp options_from_metadata(metadata) do
     [
       plug_conn: plug_conn(metadata),
-      custom: metadata,
       person: %{"id" => Map.get(metadata, :user_id, nil)}
     ]
   end
