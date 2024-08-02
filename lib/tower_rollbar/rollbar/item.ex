@@ -1,37 +1,22 @@
 defmodule TowerRollbar.Rollbar.Item do
-  def from_event(%Tower.Event{
-        kind: :error,
-        reason: exception,
-        stacktrace: stacktrace,
-        metadata: metadata
-      }) do
+  def from_event(%Tower.Event{kind: :error, reason: exception, stacktrace: stacktrace} = event) do
     trace(
       inspect(exception.__struct__),
       Exception.message(exception),
       stacktrace,
-      options_from_metadata(metadata)
+      options_from_event(event)
     )
   end
 
-  def from_event(%Tower.Event{
-        kind: :throw,
-        reason: reason,
-        stacktrace: stacktrace,
-        metadata: metadata
-      }) do
-    trace("uncaught throw", reason, stacktrace, options_from_metadata(metadata))
+  def from_event(%Tower.Event{kind: :throw, reason: reason, stacktrace: stacktrace} = event) do
+    trace("uncaught throw", reason, stacktrace, options_from_event(event))
   end
 
-  def from_event(%Tower.Event{
-        kind: :exit,
-        reason: reason,
-        stacktrace: stacktrace,
-        metadata: metadata
-      }) do
-    trace("exit", reason, stacktrace, options_from_metadata(metadata))
+  def from_event(%Tower.Event{kind: :exit, reason: reason, stacktrace: stacktrace} = event) do
+    trace("exit", reason, stacktrace, options_from_event(event))
   end
 
-  def from_event(%Tower.Event{kind: :message, level: level, reason: reason, metadata: metadata}) do
+  def from_event(%Tower.Event{kind: :message, level: level, reason: reason} = event) do
     message =
       if is_binary(reason) do
         reason
@@ -44,7 +29,7 @@ defmodule TowerRollbar.Rollbar.Item do
         "body" => message
       }
     }
-    |> item_from_body(Keyword.merge([level: level], options_from_metadata(metadata)))
+    |> item_from_body(Keyword.merge([level: level], options_from_event(event)))
   end
 
   defp trace(class, reason, stacktrace, options) do
@@ -159,14 +144,15 @@ defmodule TowerRollbar.Rollbar.Item do
     Application.fetch_env!(:tower_rollbar, :environment)
   end
 
-  defp options_from_metadata(metadata) do
+  defp options_from_event(%{log_event: log_event, metadata: metadata}) do
     [
-      plug_conn: plug_conn(metadata),
-      person: %{"id" => Map.get(metadata, :user_id, nil)}
+      plug_conn: plug_conn(log_event),
+      person: %{"id" => Map.get(metadata, :user_id, nil)},
+      custom: metadata
     ]
   end
 
-  defp plug_conn(%{log_event: %{meta: %{conn: conn}}}) do
+  defp plug_conn(%{meta: %{conn: conn}}) do
     conn
   end
 
