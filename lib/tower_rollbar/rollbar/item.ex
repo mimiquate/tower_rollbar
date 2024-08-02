@@ -1,30 +1,50 @@
 defmodule TowerRollbar.Rollbar.Item do
-  def from_exception(exception, stacktrace, options \\ [])
-      when is_exception(exception) and is_list(stacktrace) do
-    trace(inspect(exception.__struct__), Exception.message(exception), stacktrace, options)
+  def from_event(%Tower.Event{
+        kind: :error,
+        reason: exception,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
+    trace(
+      inspect(exception.__struct__),
+      Exception.message(exception),
+      stacktrace,
+      plug_conn: plug_conn(metadata)
+    )
   end
 
-  def from_throw(reason, stacktrace, options \\ []) when is_list(stacktrace) do
-    trace("uncaught throw", reason, stacktrace, options)
+  def from_event(%Tower.Event{
+        kind: :throw,
+        reason: reason,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
+    trace("uncaught throw", reason, stacktrace, plug_conn: plug_conn(metadata))
   end
 
-  def from_exit(reason, stacktrace, options \\ []) when is_list(stacktrace) do
-    trace("exit", reason, stacktrace, options)
+  def from_event(%Tower.Event{
+        kind: :exit,
+        reason: reason,
+        stacktrace: stacktrace,
+        metadata: metadata
+      }) do
+    trace("exit", reason, stacktrace, plug_conn: plug_conn(metadata))
   end
 
-  def from_message(message, options \\ [])
+  def from_event(%Tower.Event{kind: :message, level: level, reason: reason, metadata: metadata}) do
+    message =
+      if is_binary(reason) do
+        reason
+      else
+        inspect(reason)
+      end
 
-  def from_message(message, options) when is_binary(message) do
     %{
       "message" => %{
         "body" => message
       }
     }
-    |> item_from_body(Keyword.merge([level: :info], options))
-  end
-
-  def from_message(message, options) when is_list(message) do
-    from_message(inspect(message), options)
+    |> item_from_body(level: level, plug_conn: plug_conn(metadata))
   end
 
   defp trace(class, reason, stacktrace, options) do
@@ -50,6 +70,7 @@ defmodule TowerRollbar.Rollbar.Item do
       "data" =>
         %{
           "environment" => environment(),
+          # TODO: Use Tower.Event time if present
           "timestamp" => :os.system_time(:second),
           "body" => body
         }
@@ -141,5 +162,13 @@ defmodule TowerRollbar.Rollbar.Item do
 
   defp environment do
     Application.fetch_env!(:tower_rollbar, :environment)
+  end
+
+  defp plug_conn(%{log_event: %{meta: %{conn: conn}}}) do
+    conn
+  end
+
+  defp plug_conn(_) do
+    nil
   end
 end
