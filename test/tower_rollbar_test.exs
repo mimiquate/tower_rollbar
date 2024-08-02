@@ -34,6 +34,8 @@ defmodule TowerRollbarTest do
         %{
           "data" => %{
             "environment" => "test",
+            "timestamp" => _,
+            "level" => "error",
             "body" => %{
               "trace" => %{
                 "exception" => %{
