@@ -9,7 +9,7 @@ defmodule TowerRollbar.Rollbar.Item do
       inspect(exception.__struct__),
       Exception.message(exception),
       stacktrace,
-      plug_conn: plug_conn(metadata)
+      options_from_metadata(metadata)
     )
   end
 
@@ -19,7 +19,7 @@ defmodule TowerRollbar.Rollbar.Item do
         stacktrace: stacktrace,
         metadata: metadata
       }) do
-    trace("uncaught throw", reason, stacktrace, plug_conn: plug_conn(metadata))
+    trace("uncaught throw", reason, stacktrace, options_from_metadata(metadata))
   end
 
   def from_event(%Tower.Event{
@@ -28,7 +28,7 @@ defmodule TowerRollbar.Rollbar.Item do
         stacktrace: stacktrace,
         metadata: metadata
       }) do
-    trace("exit", reason, stacktrace, plug_conn: plug_conn(metadata))
+    trace("exit", reason, stacktrace, options_from_metadata(metadata))
   end
 
   def from_event(%Tower.Event{kind: :message, level: level, reason: reason, metadata: metadata}) do
@@ -44,7 +44,7 @@ defmodule TowerRollbar.Rollbar.Item do
         "body" => message
       }
     }
-    |> item_from_body(level: level, plug_conn: plug_conn(metadata))
+    |> item_from_body(Keyword.merge([level: level], options_from_metadata(metadata)))
   end
 
   defp trace(class, reason, stacktrace, options) do
@@ -157,6 +157,14 @@ defmodule TowerRollbar.Rollbar.Item do
 
   defp environment do
     Application.fetch_env!(:tower_rollbar, :environment)
+  end
+
+  defp options_from_metadata(metadata) do
+    [
+      plug_conn: plug_conn(metadata),
+      custom: metadata,
+      person: %{"id" => Keyword.get(metadata, :user_id, nil)}
+    ]
   end
 
   defp plug_conn(%{log_event: %{meta: %{conn: conn}}}) do
