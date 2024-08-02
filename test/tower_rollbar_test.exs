@@ -71,6 +71,42 @@ defmodule TowerRollbarTest do
     assert_receive({^ref, :sent}, 500)
   end
 
+  test "reports message", %{bypass: bypass} do
+    # ref message synchronization trick copied from
+    # https://github.com/PSPDFKit-labs/bypass/issues/112
+    parent = self()
+    ref = make_ref()
+
+    Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+      assert(
+        %{
+          "data" => %{
+            "environment" => "test",
+            "timestamp" => _,
+            "level" => "info",
+            "body" => %{
+              "message" => %{
+                "body" => "something interesting happened"
+              }
+            }
+          }
+        } = Jason.decode!(body)
+      )
+
+      send(parent, {ref, :sent})
+
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+    end)
+
+    Tower.handle_message(:info, "something interesting happened")
+
+    assert_receive({^ref, :sent}, 500)
+  end
+
   defp in_unlinked_process(fun) when is_function(fun, 0) do
     {:ok, pid} = Task.Supervisor.start_link()
 
