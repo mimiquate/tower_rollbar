@@ -61,11 +61,6 @@ defmodule TowerRollbar.Rollbar.Item do
   end
 
   defp item_from_body(body, options) when is_map(body) do
-    plug_conn = Keyword.get(options, :plug_conn)
-    level = Keyword.get(options, :level)
-    custom = Keyword.get(options, :custom)
-    person = Keyword.get(options, :person)
-
     %{
       "data" =>
         %{
@@ -74,10 +69,10 @@ defmodule TowerRollbar.Rollbar.Item do
           "timestamp" => :os.system_time(:second),
           "body" => body
         }
-        |> maybe_put_request_data(plug_conn)
-        |> maybe_put_level(level)
-        |> maybe_put_custom(custom)
-        |> maybe_put_person(person)
+        |> maybe_put_request_data(Keyword.get(options, :plug_conn))
+        |> maybe_put_level(Keyword.get(options, :level))
+        |> maybe_put_custom(Keyword.get(options, :custom))
+        |> maybe_put_person(Keyword.get(options, :person))
     }
   end
 
