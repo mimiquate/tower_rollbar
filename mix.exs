@@ -43,7 +43,7 @@ defmodule TowerRollbar.MixProject do
       {:castore, "~> 1.0", optional: true},
 
       # Test
-      {:bypass, "~> 2.1"}
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 
