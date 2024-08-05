@@ -144,11 +144,11 @@ defmodule TowerRollbar.Rollbar.Item do
     Application.fetch_env!(:tower_rollbar, :environment)
   end
 
-  defp options_from_event(%{log_event: log_event, metadata: metadata}) do
+  defp options_from_event(%{id: id, log_event: log_event, metadata: metadata}) do
     [
       plug_conn: plug_conn(log_event),
       person: %{"id" => Map.get(metadata, :user_id, nil)},
-      custom: metadata
+      custom: %{"id" => id, "metadata" => metadata}
     ]
   end
 
