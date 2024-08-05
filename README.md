@@ -1,5 +1,9 @@
 # TowerRollbar
 
+[![ci](https://github.com/mimiquate/tower_rollbar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mimiquate/tower_rollbar/actions?query=branch%3Amain)
+[![Hex.pm](https://img.shields.io/hexpm/v/tower_rollbar.svg)](https://hex.pm/packages/tower_rollbar)
+[![Docs](https://img.shields.io/badge/docs-gray.svg)](https://hexdocs.pm/tower_rollbar)
+
 Error and message reporting to Rollbar
 
 ## Installation
