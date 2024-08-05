@@ -148,7 +148,7 @@ defmodule TowerRollbar.Rollbar.Item do
     [
       plug_conn: plug_conn(log_event),
       person: %{"id" => Map.get(metadata, :user_id, nil)},
-      custom: Map.merge(%{"id" => id}, metadata)
+      custom: %{"id" => id, "metadata" => metadata}
     ]
   end
 
