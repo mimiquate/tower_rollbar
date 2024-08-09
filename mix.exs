@@ -42,6 +42,9 @@ defmodule TowerRollbar.MixProject do
       # Only needed for Erlang < 25
       {:castore, "~> 1.0", optional: true},
 
+      # Dev
+      {:ex_doc, "~> 0.34.2", only: :dev, runtime: false},
+
       # Test
       {:bypass, "~> 2.1", only: :test}
     ]
