@@ -100,11 +100,9 @@ defmodule TowerRollbar.Rollbar.Item do
   defp request_data(%Plug.Conn{} = conn) do
     conn =
       conn
-      |> Plug.Conn.fetch_cookies()
       |> Plug.Conn.fetch_query_params()
 
     %{
-      "cookies" => conn.req_cookies,
       "url" => "#{conn.scheme}://#{conn.host}:#{conn.port}#{conn.request_path}",
       "user_ip" => conn.remote_ip |> :inet.ntoa() |> List.to_string(),
       "headers" => conn.req_headers |> Enum.into(%{}),
