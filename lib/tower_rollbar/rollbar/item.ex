@@ -105,7 +105,6 @@ defmodule TowerRollbar.Rollbar.Item do
     %{
       "url" => "#{conn.scheme}://#{conn.host}:#{conn.port}#{conn.request_path}",
       "user_ip" => conn.remote_ip |> :inet.ntoa() |> List.to_string(),
-      "headers" => conn.req_headers |> Enum.into(%{}),
       "method" => conn.method,
       "params" =>
         case conn.params do
