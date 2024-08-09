@@ -37,7 +37,7 @@ defmodule TowerRollbar.MixProject do
     [
       {:jason, "~> 1.4"},
       {:tower, "~> 0.2.0"},
-      {:plug, "~> 1.15"},
+      {:plug, "~> 1.14"},
 
       # Only needed for Erlang < 25
       {:castore, "~> 1.0", optional: true},

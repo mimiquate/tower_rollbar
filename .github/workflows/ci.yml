@@ -15,13 +15,14 @@ jobs:
             lint: true
           - elixir: '1.16'
             erlang: '26.2.5'
-            blend: plug_1_15
           - elixir: '1.15'
             erlang: '25.3.2.12'
           - elixir: '1.14'
             erlang: '24.3.4.17'
+            blend: plug_1_15
           - elixir: '1.13'
             erlang: '24.3.4.17'
+            blend: plug_1_14
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
