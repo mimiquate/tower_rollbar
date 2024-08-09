@@ -9,7 +9,7 @@ The package can be installed by adding `tower_rollbar` to your list of dependenc
 ```elixir
 def deps do
   [
-    {:tower_rollbar, "~> 0.1.0"}
+    {:tower_rollbar, "~> 0.1.1"}
   ]
 end
 ```
