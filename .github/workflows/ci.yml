@@ -19,8 +19,10 @@ jobs:
             erlang: '25.3.2.12'
           - elixir: '1.14'
             erlang: '24.3.4.17'
+            blend: plug_1_15
           - elixir: '1.13'
             erlang: '24.3.4.17'
+            blend: plug_1_14
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
@@ -34,6 +36,8 @@ jobs:
         with:
           otp-version: ${{ matrix.erlang }}
           elixir-version: ${{ matrix.elixir }}
+      - run: cp blend/${{ matrix.blend }}.mix.lock mix.lock
+        if: ${{ matrix.blend }}
       - run: mix deps.get --check-locked
       - run: mix format --check-formatted
         if: ${{ matrix.lint }}
