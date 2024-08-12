@@ -50,8 +50,7 @@ defmodule TowerRollbar.Rollbar.Item do
       "data" =>
         %{
           "environment" => environment(),
-          # TODO: Use Tower.Event time if present
-          "timestamp" => :os.system_time(:second),
+          "timestamp" => Keyword.fetch!(options, :timestamp),
           "body" => body
         }
         |> maybe_put_request_data(Keyword.get(options, :plug_conn))
@@ -141,8 +140,9 @@ defmodule TowerRollbar.Rollbar.Item do
     Application.fetch_env!(:tower_rollbar, :environment)
   end
 
-  defp options_from_event(%{id: id, log_event: log_event, metadata: metadata}) do
+  defp options_from_event(%{id: id, datetime: datetime, log_event: log_event, metadata: metadata}) do
     [
+      timestamp: DateTime.to_unix(datetime, :second),
       plug_conn: plug_conn(log_event),
       person: %{"id" => Map.get(metadata, :user_id, nil)},
       custom: %{"id" => id, "metadata" => metadata}
