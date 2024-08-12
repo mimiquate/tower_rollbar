@@ -17,10 +17,8 @@ jobs:
             erlang: '26.2.5'
           - elixir: '1.15'
             erlang: '25.3.2.12'
-          - elixir: '1.14'
-            erlang: '24.3.4.17'
             blend: plug_1_15
-          - elixir: '1.13'
+          - elixir: '1.15'
             erlang: '24.3.4.17'
             blend: plug_1_14
     steps:

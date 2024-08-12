@@ -1,4 +1,6 @@
 defmodule TowerRollbar.Rollbar.Item do
+  @reported_request_headers ["user-agent"]
+
   def from_event(%Tower.Event{kind: :error, reason: exception, stacktrace: stacktrace} = event) do
     trace(
       inspect(exception.__struct__),
@@ -105,6 +107,7 @@ defmodule TowerRollbar.Rollbar.Item do
       "url" => "#{conn.scheme}://#{conn.host}:#{conn.port}#{conn.request_path}",
       "user_ip" => conn.remote_ip |> :inet.ntoa() |> List.to_string(),
       "method" => conn.method,
+      "headers" => request_headers(conn),
       "params" =>
         case conn.params do
           %Plug.Conn.Unfetched{aspect: :params} -> "unfetched"
@@ -147,6 +150,14 @@ defmodule TowerRollbar.Rollbar.Item do
       person: %{"id" => Map.get(metadata, :user_id, nil)},
       custom: %{"id" => id, "metadata" => metadata}
     ]
+  end
+
+  defp request_headers(%Plug.Conn{} = conn) do
+    conn.req_headers
+    |> Enum.filter(fn {header_name, _header_value} ->
+      String.downcase(header_name) in @reported_request_headers
+    end)
+    |> Enum.into(%{})
   end
 
   defp plug_conn(%{meta: %{conn: conn}}) do

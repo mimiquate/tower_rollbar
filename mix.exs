@@ -10,8 +10,9 @@ defmodule TowerRollbar.MixProject do
       app: :tower_rollbar,
       description: @description,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
       package: package(),
 
@@ -21,6 +22,9 @@ defmodule TowerRollbar.MixProject do
       docs: docs()
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -48,7 +52,8 @@ defmodule TowerRollbar.MixProject do
       {:blend, "~> 0.4.0", only: :dev},
 
       # Test
-      {:bypass, "~> 2.1", only: :test}
+      {:bypass, "~> 2.1", only: :test},
+      {:plug_cowboy, "~> 2.7", only: :test}
     ]
   end
 
