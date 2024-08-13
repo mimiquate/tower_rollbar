@@ -73,7 +73,7 @@ defmodule TowerRollbarTest do
   end
 
   @tag capture_log: true
-  test "reports arithmetic error when a Plug.Conn IS present", %{bypass: bypass} do
+  test "reports arithmetic error when a Plug.Conn IS present with Plug.Cowboy", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
     parent = self()
@@ -128,6 +128,66 @@ defmodule TowerRollbarTest do
     start_supervised!(
       {Plug.Cowboy, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
     )
+
+    {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+
+    assert_receive({^ref, :sent}, 500)
+  end
+
+  @tag capture_log: true
+  test "reports arithmetic error when a Plug.Conn IS present with Bandit", %{bypass: bypass} do
+    # ref message synchronization trick copied from
+    # https://github.com/PSPDFKit-labs/bypass/issues/112
+    parent = self()
+    ref = make_ref()
+    # An ephemeral port hopefully not being in the host running this code
+    plug_port = 51111
+    url = "http://127.0.0.1:#{plug_port}/arithmetic-error"
+
+    Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+      assert(
+        %{
+          "data" => %{
+            "environment" => "test",
+            "timestamp" => _,
+            "level" => "error",
+            "body" => %{
+              "trace" => %{
+                "exception" => %{
+                  "class" => "ArithmeticError",
+                  "message" => "bad argument in arithmetic expression"
+                },
+                "frames" => frames
+              }
+            },
+            "request" => %{
+              "method" => "GET",
+              "url" => ^url,
+              "headers" => %{"user-agent" => "httpc client"},
+              "user_ip" => "127.0.0.1"
+            }
+          }
+        } = Jason.decode!(body)
+      )
+
+      assert(
+        %{
+          "filename" => "test/support/error_test_plug.ex",
+          "lineno" => 8,
+          "method" => "anonymous fn/2 in TowerRollbar.ErrorTestPlug.do_match/4"
+        } = List.last(frames)
+      )
+
+      send(parent, {ref, :sent})
+
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+    end)
+
+    start_supervised!({Bandit, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port})
 
     {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
 

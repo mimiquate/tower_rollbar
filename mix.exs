@@ -40,7 +40,7 @@ defmodule TowerRollbar.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:tower, "~> 0.4.0"},
+      {:tower, github: "mimiquate/tower"},
       {:plug, "~> 1.14"},
 
       # Only needed for Erlang < 25
@@ -52,7 +52,8 @@ defmodule TowerRollbar.MixProject do
 
       # Test
       {:bypass, "~> 2.1", only: :test},
-      {:plug_cowboy, "~> 2.7", only: :test}
+      {:plug_cowboy, "~> 2.7", only: :test},
+      {:bandit, "~> 1.5", only: :test}
     ]
   end
 
