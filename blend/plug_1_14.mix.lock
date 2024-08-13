@@ -18,6 +18,6 @@
   "plug_crypto": {:hex, :plug_crypto, "1.2.5", "918772575e48e81e455818229bf719d4ab4181fcbf7f85b68a35620f78d89ced", [:mix], [], "hexpm", "26549a1d6345e2172eb1c233866756ae44a9609bd33ee6f99147ab3fd87fd842"},
   "ranch": {:hex, :ranch, "1.8.0", "8c7a100a139fd57f17327b6413e4167ac559fbc04ca7448e9be9057311597a1d", [:make, :rebar3], [], "hexpm", "49fbcfd3682fab1f5d109351b61257676da1a2fdbe295904176d5e521a2ddfe5"},
   "telemetry": {:hex, :telemetry, "1.2.1", "68fdfe8d8f05a8428483a97d7aab2f268aaff24b49e0f599faa091f1d4e7f61c", [:rebar3], [], "hexpm", "dad9ce9d8effc621708f99eac538ef1cbe05d6a874dd741de2e689c47feafed5"},
-  "tower": {:hex, :tower, "0.2.0", "353e93aa87542ef9e1600c6eed0b69325ef0b167aea00043ec4a84c88b213423", [:mix], [{:uniq, "~> 0.6.1", [hex: :uniq, repo: "hexpm", optional: false]}], "hexpm", "f5724118a4b81130a714fd35902fb21b2b353fa03b64b53ee7e7f17ca8fa54de"},
+  "tower": {:git, "https://github.com/mimiquate/tower.git", "68106b8386032f116afc84a94d9c3e0e99063351", []},
   "uniq": {:hex, :uniq, "0.6.1", "369660ecbc19051be526df3aa85dc393af5f61f45209bce2fa6d7adb051ae03c", [:mix], [{:ecto, "~> 3.0", [hex: :ecto, repo: "hexpm", optional: true]}], "hexpm", "6426c34d677054b3056947125b22e0daafd10367b85f349e24ac60f44effb916"},
 }

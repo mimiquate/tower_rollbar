@@ -42,6 +42,5 @@ jobs:
       - run: mix format --check-formatted
         if: ${{ matrix.lint }}
       - run: mix deps.unlock --check-unused
-        if: ${{ matrix.lint }}
       - run: mix compile --warnings-as-errors
       - run: mix test
