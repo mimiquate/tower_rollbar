@@ -3,7 +3,7 @@ defmodule TowerRollbar.MixProject do
 
   @description "Error and message reporting to Rollbar"
   @source_url "https://github.com/mimiquate/tower_rollbar"
-  @version "0.1.1"
+  @version "0.2.0"
 
   def project do
     [
@@ -40,8 +40,7 @@ defmodule TowerRollbar.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      # {:tower, "~> 0.2.0"},
-      {:tower, github: "mimiquate/tower"},
+      {:tower, "~> 0.3.0"},
       {:plug, "~> 1.14"},
 
       # Only needed for Erlang < 25
