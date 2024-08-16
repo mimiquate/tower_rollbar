@@ -4,7 +4,7 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/tower_rollbar.svg)](https://hex.pm/packages/tower_rollbar)
 [![Docs](https://img.shields.io/badge/docs-gray.svg)](https://hexdocs.pm/tower_rollbar)
 
-Error and message reporting to Rollbar
+A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
 
 ## Installation
 
