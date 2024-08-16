@@ -11,4 +11,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updates depedency to `{:tower, "~> 0.4.0"}`.
 
-[0.3.0]: https://github.com/mimiquate/tower/compare/v0.2.0...v0.3.0/
+[0.3.0]: https://github.com/mimiquate/tower_rollbar/compare/v0.2.0...v0.3.0/
