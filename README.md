@@ -18,6 +18,47 @@ def deps do
 end
 ```
 
+## Usage
+
+First, `Tower` error handler must be attached.
+
+```elixir
+# lib/<your_app>/application.ex
+
+defmodule YourApp.Application do
+  def start(_type, _args) do
+    Tower.attach()
+
+    # rest of your code
+  end
+```
+
+Then you register the reporter with Tower.
+
+```elixir
+# config/config.exs
+
+config(
+  :tower,
+  :reporters,
+  [
+    # along any other possible reporters
+    TowerRollbar.Reporter
+  ]
+)
+```
+
+And make any additional configurations specific to this reporter.
+
+```elixir
+# config/runtime.exs
+
+config :tower_rollbar,
+  enabled: config_env() == :prod,
+  access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+  environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+```
+
 ## License
 
 Copyright 2024 Mimiquate
