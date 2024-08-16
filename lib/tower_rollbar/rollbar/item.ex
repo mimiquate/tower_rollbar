@@ -143,10 +143,10 @@ defmodule TowerRollbar.Rollbar.Item do
     Application.fetch_env!(:tower_rollbar, :environment)
   end
 
-  defp options_from_event(%{id: id, datetime: datetime, log_event: log_event, metadata: metadata}) do
+  defp options_from_event(%{id: id, datetime: datetime, plug_conn: plug_conn, metadata: metadata}) do
     [
       timestamp: DateTime.to_unix(datetime, :second),
-      plug_conn: plug_conn(log_event),
+      plug_conn: plug_conn,
       person: %{"id" => Map.get(metadata, :user_id, nil)},
       custom: %{"id" => id, "metadata" => metadata}
     ]
@@ -158,13 +158,5 @@ defmodule TowerRollbar.Rollbar.Item do
       String.downcase(header_name) in @reported_request_headers
     end)
     |> Enum.into(%{})
-  end
-
-  defp plug_conn(%{meta: %{conn: conn}}) do
-    conn
-  end
-
-  defp plug_conn(_) do
-    nil
   end
 end

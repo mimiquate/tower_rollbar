@@ -18,6 +18,6 @@
   "plug_crypto": {:hex, :plug_crypto, "2.1.0", "f44309c2b06d249c27c8d3f65cfe08158ade08418cf540fd4f72d4d6863abb7b", [:mix], [], "hexpm", "131216a4b030b8f8ce0f26038bc4421ae60e4bb95c5cf5395e1421437824c4fa"},
   "ranch": {:hex, :ranch, "1.8.0", "8c7a100a139fd57f17327b6413e4167ac559fbc04ca7448e9be9057311597a1d", [:make, :rebar3], [], "hexpm", "49fbcfd3682fab1f5d109351b61257676da1a2fdbe295904176d5e521a2ddfe5"},
   "telemetry": {:hex, :telemetry, "1.2.1", "68fdfe8d8f05a8428483a97d7aab2f268aaff24b49e0f599faa091f1d4e7f61c", [:rebar3], [], "hexpm", "dad9ce9d8effc621708f99eac538ef1cbe05d6a874dd741de2e689c47feafed5"},
-  "tower": {:hex, :tower, "0.3.0", "2103ffb8b5071165659157504d2407fd5f9d5a48cbf07aa6c33b080ab3b0b647", [:mix], [{:uniq, "~> 0.6.1", [hex: :uniq, repo: "hexpm", optional: false]}], "hexpm", "78d360a275a6a3318d6ed829e285ab8eb8e17c0e71897016eb0774d25337298b"},
+  "tower": {:hex, :tower, "0.4.0", "5f351363035a02be7a11cd4231778ba6c6cddc52864d1063a973548cd2ee7e0f", [:mix], [{:uniq, "~> 0.6.1", [hex: :uniq, repo: "hexpm", optional: false]}], "hexpm", "6ee24ed8318b1c3e9a9893e01c227b2ae4feeaa8b01ca1e04253641cca2f2331"},
   "uniq": {:hex, :uniq, "0.6.1", "369660ecbc19051be526df3aa85dc393af5f61f45209bce2fa6d7adb051ae03c", [:mix], [{:ecto, "~> 3.0", [hex: :ecto, repo: "hexpm", optional: true]}], "hexpm", "6426c34d677054b3056947125b22e0daafd10367b85f349e24ac60f44effb916"},
 }
