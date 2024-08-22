@@ -1,4 +1,8 @@
 defmodule TowerRollbar.Reporter do
+  @moduledoc """
+  The reporter module that needs to be added to the list of Tower reporters.
+  """
+
   @behaviour Tower.Reporter
 
   alias TowerRollbar.Rollbar

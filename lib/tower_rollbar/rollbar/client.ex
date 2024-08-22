@@ -1,4 +1,6 @@
 defmodule TowerRollbar.Rollbar.Client do
+  @moduledoc false
+
   @access_token_header ~c"X-Rollbar-Access-Token"
 
   def post(path, payload) when is_map(payload) do

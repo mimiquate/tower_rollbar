@@ -1,5 +1,5 @@
 defmodule TowerRollbar do
   @moduledoc """
-  Documentation for `TowerRollbar`.
+  A [Rollbar](https://rollbar.com) reporter for `Tower` error handler.
   """
 end

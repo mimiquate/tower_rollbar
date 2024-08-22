@@ -1,4 +1,6 @@
 defmodule TowerRollbar.Rollbar.Item do
+  @moduledoc false
+
   @reported_request_headers ["user-agent"]
 
   def from_event(%Tower.Event{kind: :error, reason: exception, stacktrace: stacktrace} = event) do
