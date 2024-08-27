@@ -6,6 +6,8 @@
 
 A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
 
+Reports your Elixir application errors to Rollbar.
+
 ## Installation
 
 The package can be installed by adding `tower_rollbar` to your list of dependencies in `mix.exs`:
