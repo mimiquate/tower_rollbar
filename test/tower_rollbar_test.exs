@@ -33,6 +33,7 @@ defmodule TowerRollbarTest do
       assert(
         %{
           "data" => %{
+            "uuid" => _,
             "environment" => "test",
             "timestamp" => _,
             "level" => "error",
@@ -54,7 +55,7 @@ defmodule TowerRollbarTest do
           "method" =>
             ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error when a Plug.Conn NOT present"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 69
+          "lineno" => 70
         } = List.last(frames)
       )
 
@@ -88,6 +89,7 @@ defmodule TowerRollbarTest do
       assert(
         %{
           "data" => %{
+            "uuid" => _,
             "environment" => "test",
             "timestamp" => _,
             "level" => "error",
@@ -150,6 +152,7 @@ defmodule TowerRollbarTest do
       assert(
         %{
           "data" => %{
+            "uuid" => _,
             "environment" => "test",
             "timestamp" => _,
             "level" => "error",
@@ -206,6 +209,7 @@ defmodule TowerRollbarTest do
       assert(
         %{
           "data" => %{
+            "uuid" => _,
             "environment" => "test",
             "timestamp" => _,
             "level" => "info",

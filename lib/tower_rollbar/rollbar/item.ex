@@ -53,6 +53,7 @@ defmodule TowerRollbar.Rollbar.Item do
     %{
       "data" =>
         %{
+          "uuid" => Keyword.fetch!(options, :uuid),
           "environment" => environment(),
           "timestamp" => Keyword.fetch!(options, :timestamp),
           "body" => body
@@ -147,10 +148,11 @@ defmodule TowerRollbar.Rollbar.Item do
 
   defp options_from_event(%{id: id, datetime: datetime, plug_conn: plug_conn, metadata: metadata}) do
     [
+      uuid: id,
       timestamp: DateTime.to_unix(datetime, :second),
       plug_conn: plug_conn,
       person: %{"id" => Map.get(metadata, :user_id, nil)},
-      custom: %{"id" => id, "metadata" => metadata}
+      custom: %{"metadata" => metadata}
     ]
   end
 
