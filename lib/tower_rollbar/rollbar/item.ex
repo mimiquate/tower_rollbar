@@ -57,6 +57,7 @@ defmodule TowerRollbar.Rollbar.Item do
           "environment" => environment(),
           "timestamp" => Keyword.fetch!(options, :timestamp),
           "language" => "elixir",
+          "framework" => System.build_info()[:build],
           "notifier" => %{
             "name" => "tower_rollbar",
             "version" => Application.spec(:tower_rollbar, :vsn) |> to_string()
