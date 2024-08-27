@@ -58,6 +58,10 @@ defmodule TowerRollbar.Rollbar.Item do
           "timestamp" => Keyword.fetch!(options, :timestamp),
           "language" => "elixir",
           "framework" => System.build_info()[:build],
+          "server" => %{
+            "node" => node(),
+            "os" => os()
+          },
           "notifier" => %{
             "name" => "tower_rollbar",
             "version" => Application.spec(:tower_rollbar, :vsn) |> to_string()
@@ -168,5 +172,9 @@ defmodule TowerRollbar.Rollbar.Item do
       String.downcase(header_name) in @reported_request_headers
     end)
     |> Enum.into(%{})
+  end
+
+  defp os do
+    "type: #{inspect(:os.type())} version: #{inspect(:os.version())}"
   end
 end
