@@ -56,6 +56,10 @@ defmodule TowerRollbar.Rollbar.Item do
           "uuid" => Keyword.fetch!(options, :uuid),
           "environment" => environment(),
           "timestamp" => Keyword.fetch!(options, :timestamp),
+          "notifier" => %{
+            "name" => "tower_rollbar",
+            "version" => Application.spec(:tower_rollbar, :vsn) |> to_string()
+          },
           "body" => body
         }
         |> maybe_put_request_data(Keyword.get(options, :plug_conn))
