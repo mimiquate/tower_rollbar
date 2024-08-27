@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/mimiquate/tower_rollbar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mimiquate/tower_rollbar/actions?query=branch%3Amain)
 [![Hex.pm](https://img.shields.io/hexpm/v/tower_rollbar.svg)](https://hex.pm/packages/tower_rollbar)
-[![Docs](https://img.shields.io/badge/docs-gray.svg)](https://hexdocs.pm/tower_rollbar)
+[![Documentation](https://img.shields.io/badge/Documentation-purple.svg)](https://hexdocs.pm/tower_rollbar)
 
 A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
 
