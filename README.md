@@ -6,7 +6,7 @@
 
 A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
 
-Reports your Elixir application errors to Rollbar.
+Error tracking and reporting to Rollbar.
 
 ## Installation
 

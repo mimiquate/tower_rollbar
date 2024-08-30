@@ -1,7 +1,7 @@
 defmodule TowerRollbar.MixProject do
   use Mix.Project
 
-  @description "A Rollbar reporter for Tower error handler"
+  @description "Error tracking and reporting to Rollbar"
   @source_url "https://github.com/mimiquate/tower_rollbar"
   @version "0.4.1"
 
