@@ -15,7 +15,7 @@ The package can be installed by adding `tower_rollbar` to your list of dependenc
 ```elixir
 def deps do
   [
-    {:tower_rollbar, "~> 0.4.1"}
+    {:tower_rollbar, "~> 0.5.0"}
   ]
 end
 ```
