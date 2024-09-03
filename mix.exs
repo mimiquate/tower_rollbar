@@ -31,6 +31,7 @@ defmodule TowerRollbar.MixProject do
     [
       extra_applications: [:logger, :public_key, :inets],
       env: [
+        access_token: nil,
         rollbar_base_url: "https://api.rollbar.com/api/1"
       ]
     ]

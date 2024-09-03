@@ -3,6 +3,10 @@ defmodule TowerRollbar.Rollbar.Client do
 
   @access_token_header ~c"X-Rollbar-Access-Token"
 
+  def enabled? do
+    is_binary(access_token())
+  end
+
   def post(path, payload) when is_map(payload) do
     :httpc.request(
       :post,

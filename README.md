@@ -55,10 +55,11 @@ And make any additional configurations specific to this reporter.
 ```elixir
 # config/runtime.exs
 
-config :tower_rollbar,
-  enabled: config_env() == :prod,
-  access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-  environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+if config_env() == :prod do
+  config :tower_rollbar,
+    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+end
 ```
 
 ## License

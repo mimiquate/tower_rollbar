@@ -9,7 +9,6 @@ defmodule TowerRollbarTest do
     Application.put_env(:tower_rollbar, :rollbar_base_url, "http://localhost:#{bypass.port}/")
     Application.put_env(:tower_rollbar, :environment, :test)
     Application.put_env(:tower_rollbar, :access_token, "fake-token")
-    Application.put_env(:tower_rollbar, :enabled, true)
 
     Tower.attach()
 
@@ -55,7 +54,7 @@ defmodule TowerRollbarTest do
           "method" =>
             ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error when a Plug.Conn NOT present"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 70
+          "lineno" => 69
         } = List.last(frames)
       )
 
