@@ -4,9 +4,9 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/tower_rollbar.svg)](https://hex.pm/packages/tower_rollbar)
 [![Documentation](https://img.shields.io/badge/Documentation-purple.svg)](https://hexdocs.pm/tower_rollbar)
 
-A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
-
 Error tracking and reporting to Rollbar.
+
+A [Rollbar](https://rollbar.com) reporter for [Tower](https://github.com/mimiquate/tower) error handler.
 
 ## Installation
 
@@ -35,7 +35,7 @@ defmodule YourApp.Application do
   end
 ```
 
-Then you register the reporter with Tower.
+Then ask `Tower` to use the `TowerRollbar` reporter.
 
 ```elixir
 # config/config.exs
@@ -50,7 +50,7 @@ config(
 )
 ```
 
-And make any additional configurations specific to this reporter.
+And configure `:tower_rollbar`.
 
 ```elixir
 # config/runtime.exs
@@ -61,6 +61,13 @@ if config_env() == :prod do
     environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
 end
 ```
+
+That's it.
+
+It will try report any error, throw or abnormal exit within your application. That includes errors in
+any plug call (including Phoenix), Oban job, async task or any other process.
+
+Some HTTP request data will be included in the report if a `Plug.Conn` is available when handling the error.
 
 ## License
 
