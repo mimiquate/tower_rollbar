@@ -69,6 +69,22 @@ any plug call (including Phoenix), Oban job, async task or any other process.
 
 Some HTTP request data will be included in the report if a `Plug.Conn` is available when handling the error.
 
+### Manual reporting
+
+You can manually report errors just by informing `Tower` about any manually handled errors, throws or abnormal exits.
+
+
+```elixir
+try do
+  # possibly crashing code
+catch
+  kind, reason ->
+    Tower.handle_caught(kind, reason, __STACKTRACE__)
+end
+```
+
+More details on https://hexdocs.pm/tower/Tower.html#module-manual-handling.
+
 ## License
 
 Copyright 2024 Mimiquate
