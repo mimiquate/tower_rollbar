@@ -21,7 +21,6 @@ defmodule TowerRollbarTest do
     {:ok, bypass: bypass}
   end
 
-  @tag capture_log: true
   test "reports arithmetic error", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
@@ -66,8 +65,10 @@ defmodule TowerRollbarTest do
       |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
     end)
 
-    in_unlinked_process(fn ->
-      1 / 0
+    capture_log(fn ->
+      in_unlinked_process(fn ->
+        1 / 0
+      end)
     end)
 
     assert_receive({^ref, :sent}, 500)
@@ -106,7 +107,7 @@ defmodule TowerRollbarTest do
         %{
           "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports throw"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 122
+          "lineno" => 123
         } = List.last(frames)
       )
 
@@ -159,7 +160,7 @@ defmodule TowerRollbarTest do
         %{
           "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports abnormal exit"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 175
+          "lineno" => 176
         } = List.last(frames)
       )
 
@@ -179,7 +180,6 @@ defmodule TowerRollbarTest do
     assert_receive({^ref, :sent}, 500)
   end
 
-  @tag capture_log: true
   test "reports arithmetic error when a Plug.Conn IS present with Plug.Cowboy", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
@@ -237,12 +237,13 @@ defmodule TowerRollbarTest do
       {Plug.Cowboy, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
     )
 
-    {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+    capture_log(fn ->
+      {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+    end)
 
     assert_receive({^ref, :sent}, 500)
   end
 
-  @tag capture_log: true
   test "reports arithmetic error when a Plug.Conn IS present with Bandit", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
@@ -296,9 +297,13 @@ defmodule TowerRollbarTest do
       |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
     end)
 
-    start_supervised!({Bandit, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port})
+    capture_log(fn ->
+      start_supervised!(
+        {Bandit, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
+      )
 
-    {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+      {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+    end)
 
     assert_receive({^ref, :sent}, 500)
   end
