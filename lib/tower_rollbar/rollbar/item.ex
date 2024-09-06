@@ -17,7 +17,7 @@ defmodule TowerRollbar.Rollbar.Item do
   end
 
   def from_event(%Tower.Event{kind: :exit, reason: reason, stacktrace: stacktrace} = event) do
-    trace("exit", reason, stacktrace, options_from_event(event))
+    trace("(exit)", reason, stacktrace, options_from_event(event))
   end
 
   def from_event(%Tower.Event{kind: :message, level: level, reason: reason} = event) do

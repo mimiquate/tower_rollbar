@@ -127,6 +127,59 @@ defmodule TowerRollbarTest do
     assert_receive({^ref, :sent}, 500)
   end
 
+  test "reports abnormal exit", %{bypass: bypass} do
+    # ref message synchronization trick copied from
+    # https://github.com/PSPDFKit-labs/bypass/issues/112
+    parent = self()
+    ref = make_ref()
+
+    Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+      assert(
+        %{
+          "data" => %{
+            "uuid" => _,
+            "environment" => "test",
+            "timestamp" => _,
+            "level" => "error",
+            "body" => %{
+              "trace" => %{
+                "exception" => %{
+                  "class" => "(exit)",
+                  "message" => "abnormal"
+                },
+                "frames" => frames
+              }
+            }
+          }
+        } = Jason.decode!(body)
+      )
+
+      assert(
+        %{
+          "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports abnormal exit"/1),
+          "filename" => "test/tower_rollbar_test.exs",
+          "lineno" => 176
+        } = List.last(frames)
+      )
+
+      send(parent, {ref, :sent})
+
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+    end)
+
+    capture_log(fn ->
+      in_unlinked_process(fn ->
+        exit(:abnormal)
+      end)
+    end)
+
+    assert_receive({^ref, :sent}, 500)
+  end
+
   test "reports arithmetic error when a Plug.Conn IS present with Plug.Cowboy", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
