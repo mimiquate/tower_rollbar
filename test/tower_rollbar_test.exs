@@ -180,7 +180,7 @@ defmodule TowerRollbarTest do
     assert_receive({^ref, :sent}, 500)
   end
 
-  test "reports arithmetic error when a Plug.Conn IS present with Plug.Cowboy", %{bypass: bypass} do
+  test "error report includes request data when available via Plug.Cowboy", %{bypass: bypass} do
     # ref message synchronization trick copied from
     # https://github.com/PSPDFKit-labs/bypass/issues/112
     parent = self()
@@ -222,6 +222,70 @@ defmodule TowerRollbarTest do
         %{
           "filename" => "test/support/error_test_plug.ex",
           "lineno" => 8,
+          "method" => "anonymous fn/2 in TowerRollbar.ErrorTestPlug.do_match/4"
+        } = List.last(frames)
+      )
+
+      send(parent, {ref, :sent})
+
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+    end)
+
+    start_supervised!(
+      {Plug.Cowboy, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
+    )
+
+    capture_log(fn ->
+      {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+    end)
+
+    assert_receive({^ref, :sent}, 500)
+  end
+
+  test "throw report includes request data when available via Plug.Cowboy", %{bypass: bypass} do
+    # ref message synchronization trick copied from
+    # https://github.com/PSPDFKit-labs/bypass/issues/112
+    parent = self()
+    ref = make_ref()
+    # An ephemeral port hopefully not being in the host running this code
+    plug_port = 51111
+    url = "http://127.0.0.1:#{plug_port}/uncaught-throw"
+
+    Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+      assert(
+        %{
+          "data" => %{
+            "uuid" => _,
+            "environment" => "test",
+            "timestamp" => _,
+            "level" => "error",
+            "body" => %{
+              "trace" => %{
+                "exception" => %{
+                  "class" => "(throw)",
+                  "message" => "from inside a plug"
+                },
+                "frames" => frames
+              }
+            },
+            "request" => %{
+              "method" => "GET",
+              "url" => ^url,
+              "headers" => %{"user-agent" => "httpc client"},
+              "user_ip" => "127.0.0.1"
+            }
+          }
+        } = Jason.decode!(body)
+      )
+
+      assert(
+        %{
+          "filename" => "test/support/error_test_plug.ex",
+          "lineno" => 14,
           "method" => "anonymous fn/2 in TowerRollbar.ErrorTestPlug.do_match/4"
         } = List.last(frames)
       )
