@@ -16,6 +16,12 @@ defmodule TowerRollbar.ErrorTestPlug do
     send_resp(conn, 200, "OK")
   end
 
+  get "/abnormal-exit" do
+    exit(:abnormal)
+
+    send_resp(conn, 200, "OK")
+  end
+
   match _ do
     send_resp(conn, 404, "Not Found")
   end
