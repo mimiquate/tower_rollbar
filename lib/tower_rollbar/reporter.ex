@@ -16,7 +16,7 @@ defmodule TowerRollbar.Reporter do
           Rollbar.Item.from_event(event)
         )
     else
-      IO.puts("Tower.Rollbar NOT enabled, ignoring...")
+      IO.puts("TowerRollbar NOT enabled, ignoring...")
     end
   end
 end
