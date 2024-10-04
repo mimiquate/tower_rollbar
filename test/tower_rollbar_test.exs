@@ -12,12 +12,6 @@ defmodule TowerRollbarTest do
     Application.put_env(:tower_rollbar, :environment, :test)
     Application.put_env(:tower_rollbar, :access_token, "fake-token")
 
-    Tower.attach()
-
-    on_exit(fn ->
-      Tower.detach()
-    end)
-
     {:ok, bypass: bypass}
   end
 
@@ -54,7 +48,7 @@ defmodule TowerRollbarTest do
         %{
           "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports arithmetic error"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 70
+          "lineno" => 64
         } = List.last(frames)
       )
 
@@ -107,7 +101,7 @@ defmodule TowerRollbarTest do
         %{
           "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports throw"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 123
+          "lineno" => 117
         } = List.last(frames)
       )
 
@@ -160,7 +154,7 @@ defmodule TowerRollbarTest do
         %{
           "method" => ~s(anonymous fn/0 in TowerRollbarTest."test reports abnormal exit"/1),
           "filename" => "test/tower_rollbar_test.exs",
-          "lineno" => 176
+          "lineno" => 170
         } = List.last(frames)
       )
 

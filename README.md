@@ -22,20 +22,7 @@ end
 
 ## Usage
 
-First, `Tower` error handler must be attached.
-
-```elixir
-# lib/<your_app>/application.ex
-
-defmodule YourApp.Application do
-  def start(_type, _args) do
-    Tower.attach()
-
-    # rest of your code
-  end
-```
-
-Then ask `Tower` to use the `TowerRollbar` reporter.
+Ask `Tower` to use the `TowerRollbar` reporter.
 
 ```elixir
 # config/config.exs

@@ -41,7 +41,7 @@ defmodule TowerRollbar.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:tower, "~> 0.5.0"},
+      {:tower, "~> 0.6.0"},
       {:plug, "~> 1.14"},
 
       # Only needed for Erlang < 25
