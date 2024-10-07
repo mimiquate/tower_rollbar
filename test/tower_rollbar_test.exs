@@ -7,7 +7,7 @@ defmodule TowerRollbarTest do
   setup do
     bypass = Bypass.open()
 
-    Application.put_env(:tower, :reporters, [TowerRollbar.Reporter])
+    Application.put_env(:tower, :reporters, [TowerRollbar])
     Application.put_env(:tower_rollbar, :rollbar_base_url, "http://localhost:#{bypass.port}/")
     Application.put_env(:tower_rollbar, :environment, :test)
     Application.put_env(:tower_rollbar, :access_token, "fake-token")

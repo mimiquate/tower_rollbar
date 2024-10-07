@@ -1,13 +1,8 @@
 defmodule TowerRollbar.Reporter do
-  @moduledoc """
-  The reporter module that needs to be added to the list of Tower reporters.
-  """
-
-  @behaviour Tower.Reporter
+  @moduledoc false
 
   alias TowerRollbar.Rollbar
 
-  @impl true
   def report_event(%Tower.Event{} = event) do
     if Rollbar.Client.enabled?() do
       {:ok, _} =
