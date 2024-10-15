@@ -64,9 +64,9 @@ You can manually report errors just by informing `Tower` about any manually hand
 ```elixir
 try do
   # possibly crashing code
-catch
-  kind, reason ->
-    Tower.handle_caught(kind, reason, __STACKTRACE__)
+rescue
+  exception ->
+    Tower.handle_exception(exception, __STACKTRACE__)
 end
 ```
 
