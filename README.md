@@ -15,7 +15,7 @@ The package can be installed by adding `tower_rollbar` to your list of dependenc
 ```elixir
 def deps do
   [
-    {:tower_rollbar, "~> 0.6.0"}
+    {:tower_rollbar, "~> 0.6.2"}
   ]
 end
 ```
@@ -66,7 +66,7 @@ try do
   # possibly crashing code
 rescue
   exception ->
-    Tower.handle_exception(exception, __STACKTRACE__)
+    Tower.report_exception(exception, __STACKTRACE__)
 end
 ```
 

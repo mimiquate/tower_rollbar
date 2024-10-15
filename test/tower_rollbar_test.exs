@@ -457,7 +457,7 @@ defmodule TowerRollbarTest do
       |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
     end)
 
-    Tower.handle_message(:info, "something interesting happened")
+    Tower.report_message(:info, "something interesting happened")
 
     assert_receive({^ref, :sent}, 500)
   end
