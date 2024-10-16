@@ -70,7 +70,7 @@ rescue
 end
 ```
 
-More details on https://hexdocs.pm/tower/Tower.html#module-manual-handling.
+More details on https://hexdocs.pm/tower/Tower.html#module-manual-reporting.
 
 ## License
 
