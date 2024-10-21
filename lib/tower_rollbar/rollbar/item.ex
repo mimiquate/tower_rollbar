@@ -21,16 +21,9 @@ defmodule TowerRollbar.Rollbar.Item do
   end
 
   def from_event(%Tower.Event{kind: :message, level: level, reason: reason} = event) do
-    message =
-      if is_binary(reason) do
-        reason
-      else
-        inspect(reason)
-      end
-
     %{
       "message" => %{
-        "body" => message
+        "body" => string_or_inspect(reason)
       }
     }
     |> item_from_body(Keyword.merge([level: level], options_from_event(event)))
@@ -42,7 +35,7 @@ defmodule TowerRollbar.Rollbar.Item do
         "frames" => frames(stacktrace),
         "exception" => %{
           "class" => class,
-          "message" => reason
+          "message" => string_or_inspect(reason)
         }
       }
     }
@@ -177,4 +170,7 @@ defmodule TowerRollbar.Rollbar.Item do
   defp os do
     "type: #{inspect(:os.type())} version: #{inspect(:os.version())}"
   end
+
+  defp string_or_inspect(data) when is_binary(data), do: data
+  defp string_or_inspect(data), do: inspect(data)
 end

@@ -127,7 +127,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(exit)",
-                    "message" => "abnormal"
+                    "message" => ":abnormal"
                   },
                   "frames" => frames
                 }
@@ -301,7 +301,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(exit)",
-                    "message" => "abnormal"
+                    "message" => ":abnormal"
                   },
                   # Plug.Cowboy doesn't provide stacktrace for exits
                   "frames" => []
