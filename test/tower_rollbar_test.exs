@@ -443,6 +443,57 @@ defmodule TowerRollbarTest do
     end)
   end
 
+  test "reports throw with Bandit", %{bypass: bypass} do
+    # An ephemeral port hopefully not being in the host running this code
+    plug_port = 51111
+    url = "http://127.0.0.1:#{plug_port}/uncaught-throw"
+
+    waiting_for(fn done ->
+      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+        {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+        assert(
+          %{
+            "data" => %{
+              "uuid" => _,
+              "environment" => "test",
+              "timestamp" => _,
+              "level" => "error",
+              "body" => %{
+                "trace" => %{
+                  "exception" => %{
+                    # An exit instead of a throw because Bandit doesn't handle throw's
+                    # for the moment. See: https://github.com/mtrudel/bandit/pull/410.
+                    "class" => "(exit)",
+                    "message" => "bad return value: \"from inside a plug\""
+                  },
+                  # No stacktrace
+                  "frames" => []
+                }
+              }
+              # No request data
+            }
+          } = Jason.decode!(body)
+        )
+
+        done.()
+
+        conn
+        |> Plug.Conn.put_resp_content_type("application/json")
+        |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+      end)
+
+      capture_log(fn ->
+        start_supervised!(
+          {Bandit, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
+        )
+
+        {:error, _response} =
+          :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+      end)
+    end)
+  end
+
   test "reports message", %{bypass: bypass} do
     waiting_for(fn done ->
       Bypass.expect_once(bypass, "POST", "/item", fn conn ->
