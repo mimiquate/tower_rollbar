@@ -127,7 +127,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(exit)",
-                    "message" => "abnormal"
+                    "message" => ":abnormal"
                   },
                   "frames" => frames
                 }
@@ -154,6 +154,55 @@ defmodule TowerRollbarTest do
       capture_log(fn ->
         in_unlinked_process(fn ->
           exit(:abnormal)
+        end)
+      end)
+    end)
+  end
+
+  test "reports :gen_server bad exit", %{bypass: bypass} do
+    waiting_for(fn done ->
+      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+        {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+        assert(
+          %{
+            "data" => %{
+              "uuid" => _,
+              "environment" => "test",
+              "timestamp" => _,
+              "level" => "error",
+              "body" => %{
+                "trace" => %{
+                  "exception" => %{
+                    "class" => "(exit)",
+                    "message" => "bad return value: \"bad value\""
+                  },
+                  "frames" => frames
+                }
+              }
+            }
+          } = Jason.decode!(body)
+        )
+
+        assert(
+          %{
+            "method" =>
+              ~s(anonymous fn/0 in TowerRollbarTest."test reports :gen_server bad exit"/1),
+            "filename" => "test/tower_rollbar_test.exs",
+            "lineno" => 205
+          } = List.last(frames)
+        )
+
+        done.()
+
+        conn
+        |> Plug.Conn.put_resp_content_type("application/json")
+        |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+      end)
+
+      capture_log(fn ->
+        in_unlinked_process(fn ->
+          exit({:bad_return_value, "bad value"})
         end)
       end)
     end)
@@ -301,7 +350,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(exit)",
-                    "message" => "abnormal"
+                    "message" => ":abnormal"
                   },
                   # Plug.Cowboy doesn't provide stacktrace for exits
                   "frames" => []
