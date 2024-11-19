@@ -462,18 +462,28 @@ defmodule TowerRollbarTest do
               "body" => %{
                 "trace" => %{
                   "exception" => %{
-                    # An exit instead of a throw because Bandit doesn't handle throw's
-                    # for the moment. See: https://github.com/mtrudel/bandit/pull/410.
-                    "class" => "(exit)",
-                    "message" => "bad return value: \"from inside a plug\""
+                    "class" => "(throw)",
+                    "message" => "\"from inside a plug\""
                   },
-                  # No stacktrace
-                  "frames" => []
+                  "frames" => frames
                 }
+              },
+              "request" => %{
+                "method" => "GET",
+                "url" => ^url,
+                "headers" => %{"user-agent" => "httpc client"},
+                "user_ip" => "127.0.0.1"
               }
-              # No request data
             }
           } = Jason.decode!(body)
+        )
+
+        assert(
+          %{
+            "filename" => "test/support/error_test_plug.ex",
+            "lineno" => 14,
+            "method" => "anonymous fn/2 in TowerRollbar.ErrorTestPlug.do_match/4"
+          } = List.last(frames)
         )
 
         done.()
@@ -488,8 +498,7 @@ defmodule TowerRollbarTest do
           {Bandit, plug: TowerRollbar.ErrorTestPlug, scheme: :http, port: plug_port}
         )
 
-        {:error, _response} =
-          :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
+        {:ok, _response} = :httpc.request(:get, {url, [{~c"user-agent", "httpc client"}]}, [], [])
       end)
     end)
   end
