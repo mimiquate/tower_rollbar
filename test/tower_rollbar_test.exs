@@ -79,7 +79,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(throw)",
-                    "message" => "something"
+                    "message" => "\"something\""
                   },
                   "frames" => frames
                 }
@@ -288,7 +288,7 @@ defmodule TowerRollbarTest do
                 "trace" => %{
                   "exception" => %{
                     "class" => "(throw)",
-                    "message" => "from inside a plug"
+                    "message" => "\"from inside a plug\""
                   },
                   "frames" => frames
                 }
