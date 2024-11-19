@@ -3,7 +3,7 @@ defmodule TowerRollbar.MixProject do
 
   @description "Error tracking and reporting to Rollbar"
   @source_url "https://github.com/mimiquate/tower_rollbar"
-  @version "0.6.1"
+  @version "0.6.2"
 
   def project do
     [
