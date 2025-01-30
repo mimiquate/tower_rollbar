@@ -52,7 +52,7 @@ defmodule TowerRollbar.MixProject do
       {:blend, "~> 0.4.0", only: :dev},
 
       # Test
-      {:bypass, github: "mimiquate/bypass", only: :test},
+      {:bypass, github: "mimiquate/bypass", branch: "master", only: :test},
       {:plug_cowboy, "~> 2.7", only: :test},
       {:bandit, "~> 1.5", only: :test}
     ]
