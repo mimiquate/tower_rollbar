@@ -5,19 +5,19 @@ defmodule TowerRollbarTest do
   import ExUnit.CaptureLog, only: [capture_log: 1]
 
   setup do
-    bypass = Bypass.open()
+    lasso = Lasso.open()
 
     Application.put_env(:tower, :reporters, [TowerRollbar])
-    Application.put_env(:tower_rollbar, :rollbar_base_url, "http://localhost:#{bypass.port}/")
+    Application.put_env(:tower_rollbar, :rollbar_base_url, "http://localhost:#{lasso.port}")
     Application.put_env(:tower_rollbar, :environment, :test)
     Application.put_env(:tower_rollbar, :access_token, "fake-token")
 
-    {:ok, bypass: bypass}
+    {:ok, lasso: lasso}
   end
 
-  test "reports arithmetic error", %{bypass: bypass} do
+  test "reports arithmetic error", %{lasso: lasso} do
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -63,9 +63,9 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports throw", %{bypass: bypass} do
+  test "reports throw", %{lasso: lasso} do
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -111,9 +111,9 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports abnormal exit", %{bypass: bypass} do
+  test "reports abnormal exit", %{lasso: lasso} do
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -159,9 +159,9 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports :gen_server bad exit", %{bypass: bypass} do
+  test "reports :gen_server bad exit", %{lasso: lasso} do
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -208,13 +208,13 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "error report includes request data when available via Plug.Cowboy", %{bypass: bypass} do
+  test "error report includes request data when available via Plug.Cowboy", %{lasso: lasso} do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111
     url = "http://127.0.0.1:#{plug_port}/arithmetic-error"
 
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -268,13 +268,13 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "throw report includes request data when available via Plug.Cowboy", %{bypass: bypass} do
+  test "throw report includes request data when available via Plug.Cowboy", %{lasso: lasso} do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111
     url = "http://127.0.0.1:#{plug_port}/uncaught-throw"
 
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -329,14 +329,14 @@ defmodule TowerRollbarTest do
   end
 
   test "abnormal exit report includes request data when available via Plug.Cowboy", %{
-    bypass: bypass
+    lasso: lasso
   } do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111
     url = "http://127.0.0.1:#{plug_port}/abnormal-exit"
 
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -383,13 +383,13 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports arithmetic error when a Plug.Conn IS present with Bandit", %{bypass: bypass} do
+  test "reports arithmetic error when a Plug.Conn IS present with Bandit", %{lasso: lasso} do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111
     url = "http://127.0.0.1:#{plug_port}/arithmetic-error"
 
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -443,13 +443,13 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports throw with Bandit", %{bypass: bypass} do
+  test "reports throw with Bandit", %{lasso: lasso} do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111
     url = "http://127.0.0.1:#{plug_port}/uncaught-throw"
 
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
@@ -503,9 +503,9 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports message", %{bypass: bypass} do
+  test "reports message", %{lasso: lasso} do
     waiting_for(fn done ->
-      Bypass.expect_once(bypass, "POST", "/item", fn conn ->
+      Lasso.expect_once(lasso, "POST", "/item", fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
 
         assert(
