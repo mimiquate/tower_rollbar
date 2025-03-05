@@ -52,7 +52,7 @@ defmodule TowerRollbar.MixProject do
       {:blend, "~> 0.4.0", only: :dev},
 
       # Test
-      {:lasso, "~> 0.1.4", only: :test},
+      {:test_server, "~> 0.1.20", only: :test},
       {:plug_cowboy, "~> 2.7", only: :test},
       {:bandit, "~> 1.5", only: :test}
     ]
