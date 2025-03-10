@@ -41,7 +41,7 @@ defmodule TowerRollbarTest do
                   }
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -57,7 +57,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -95,7 +95,7 @@ defmodule TowerRollbarTest do
                   }
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -110,7 +110,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -148,7 +148,7 @@ defmodule TowerRollbarTest do
                   }
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -163,7 +163,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -201,7 +201,7 @@ defmodule TowerRollbarTest do
                   }
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -217,7 +217,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -267,7 +267,7 @@ defmodule TowerRollbarTest do
                   "user_ip" => "127.0.0.1"
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -282,7 +282,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -334,7 +334,7 @@ defmodule TowerRollbarTest do
                   "user_ip" => "127.0.0.1"
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -349,7 +349,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -402,14 +402,14 @@ defmodule TowerRollbarTest do
                   "user_ip" => "127.0.0.1"
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           done.()
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -461,7 +461,7 @@ defmodule TowerRollbarTest do
                   "user_ip" => "127.0.0.1"
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -476,7 +476,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -526,7 +526,7 @@ defmodule TowerRollbarTest do
                   "user_ip" => "127.0.0.1"
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           assert(
@@ -541,7 +541,7 @@ defmodule TowerRollbarTest do
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 
@@ -577,14 +577,14 @@ defmodule TowerRollbarTest do
                   }
                 }
               }
-            } = Jason.decode!(body)
+            } = TowerRollbar.json_module().decode!(body)
           )
 
           done.()
 
           conn
           |> Plug.Conn.put_resp_content_type("application/json")
-          |> Plug.Conn.resp(200, Jason.encode!(%{"ok" => true}))
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
         end
       )
 

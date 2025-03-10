@@ -14,7 +14,7 @@ defmodule TowerRollbar.Rollbar.Client do
         ~c"#{base_url()}#{path}",
         [{@access_token_header, access_token()}],
         ~c"application/json",
-        Jason.encode!(payload)
+        TowerRollbar.json_module().encode!(payload)
       },
       [
         ssl: tls_client_options()
