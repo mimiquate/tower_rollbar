@@ -3,6 +3,7 @@ defmodule TowerRollbar.MixProject do
 
   @description "Error tracking and reporting to Rollbar"
   @source_url "https://github.com/mimiquate/tower_rollbar"
+  @changelog_url @source_url <> "/blob/-/CHANGELOG.md"
   @version "0.6.3"
 
   def project do
@@ -64,7 +65,8 @@ defmodule TowerRollbar.MixProject do
     [
       licenses: ["Apache-2.0"],
       links: %{
-        "GitHub" => @source_url
+        "GitHub" => @source_url,
+        "Changelog" => @changelog_url
       }
     ]
   end
