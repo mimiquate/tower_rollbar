@@ -36,7 +36,7 @@ jobs:
         with:
           otp-version: ${{ matrix.erlang }}
           elixir-version: ${{ matrix.elixir }}
-      - run: cp blend/${{ matrix.blend }}.mix.lock mix.lock
+      - run: cp blend/${{ matrix.blend }}/mix.lock mix.lock
         if: ${{ matrix.blend }}
       - run: mix deps.get --check-locked
       - run: mix format --check-formatted
