@@ -25,5 +25,5 @@ tower_rollbar-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 
-/blend/_build
-/blend/deps
+/blend/*/_build
+/blend/*/deps
