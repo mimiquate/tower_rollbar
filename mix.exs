@@ -51,7 +51,7 @@ defmodule TowerRollbar.MixProject do
       {:castore, "~> 1.0", optional: true},
 
       # Dev
-      {:ex_doc, "~> 0.37.1", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.38.1", only: :dev, runtime: false},
       {:blend, "~> 0.5.0", only: :dev},
 
       # Test
