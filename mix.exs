@@ -47,6 +47,7 @@ defmodule TowerRollbar.MixProject do
       # Optional
       # Only needed for Elixir < 1.18
       {:jason, "~> 1.4", optional: true},
+      {:igniter, "~> 0.6", optional: true},
       # Only needed for Erlang < 25
       {:castore, "~> 1.0", optional: true},
 
