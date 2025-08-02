@@ -79,9 +79,12 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
     end
 
     defp runtime_config_exists?(igniter) do
-      Igniter.Project.Config.configures_key?(igniter, "runtime.exs", :tower_rollbar, [
-        :access_token
-      ])
+      Igniter.Project.Config.configures_key?(
+        igniter,
+        "runtime.exs",
+        :tower_rollbar,
+        [:access_token]
+      )
     end
 
     defp add_runtime_config(igniter) do
@@ -158,11 +161,14 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
     end
 
     defp add_prod_block_with_config(zipper) do
-      Igniter.Code.Common.add_code(zipper, """
-      if config_env() == :prod do
-        #{@rollbar_config_code}
-      end
-      """)
+      Igniter.Code.Common.add_code(
+        zipper,
+        """
+        if config_env() == :prod do
+          #{@rollbar_config_code}
+        end
+        """
+      )
     end
   end
 else
