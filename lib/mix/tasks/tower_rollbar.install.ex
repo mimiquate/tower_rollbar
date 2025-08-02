@@ -144,12 +144,12 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
 
     defp update_existing_rollbar_config(zipper) do
       zipper
-      |> Igniter.Project.Config.modify_configuration_code(
+      |> Igniter.Project.Config.modify_config_code(
         [:access_token],
         :tower_rollbar,
         Sourceror.parse_string!(~s[System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN")])
       )
-      |> Igniter.Project.Config.modify_configuration_code(
+      |> Igniter.Project.Config.modify_config_code(
         [:environment],
         :tower_rollbar,
         Sourceror.parse_string!(~s[System.get_env("DEPLOYMENT_ENV", to_string(config_env()))])
