@@ -53,7 +53,6 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
         adds_deps: [],
         installs: [],
         example: @example,
-        only: nil,
         positional: [],
         composes: [],
         schema: [],
