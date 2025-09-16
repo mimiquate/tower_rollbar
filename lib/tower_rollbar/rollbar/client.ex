@@ -24,7 +24,8 @@ defmodule TowerRollbar.Rollbar.Client do
   end
 
   cond do
-    function_exported?(:public_key, :cacerts_get, 0) ->
+    Code.ensure_loaded?(:public_key) and
+        function_exported?(:public_key, :cacerts_get, 0) ->
       # Included in Erlang 25+
       defp tls_client_options do
         [
