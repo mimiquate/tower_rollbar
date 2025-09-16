@@ -1,3 +1,4 @@
+# TODO: Remove this conditonal once we only run tests against tower v0.8+
 if Code.ensure_loaded?(Tower.Igniter) do
   defmodule Mix.Tasks.TowerRollbar.Task.InstallTest do
     use ExUnit.Case, async: true
