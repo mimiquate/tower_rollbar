@@ -6,19 +6,25 @@ if Code.ensure_loaded?(Tower.Igniter) do
     test "generates everything from scratch" do
       test_project()
       |> Igniter.compose_task("tower_rollbar.install", [])
-      |> assert_creates("config/config.exs", """
-      import Config
-      config :tower, reporters: [TowerRollbar]
-      """)
-      |> assert_creates("config/runtime.exs", """
-      import Config
+      |> assert_creates(
+        "config/config.exs",
+        """
+        import Config
+        config :tower, reporters: [TowerRollbar]
+        """
+      )
+      |> assert_creates(
+        "config/runtime.exs",
+        """
+        import Config
 
-      if config_env() == :prod do
-        config :tower_rollbar,
-          access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-          environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
-      end
-      """)
+        if config_env() == :prod do
+          config :tower_rollbar,
+            access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+            environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+        end
+        """
+      )
     end
 
     test "modifies existing tower configs if available" do
@@ -35,22 +41,28 @@ if Code.ensure_loaded?(Tower.Igniter) do
         }
       )
       |> Igniter.compose_task("tower_rollbar.install", [])
-      |> assert_has_patch("config/config.exs", """
-      |import Config
-      |
-      - |config :tower, reporters: [TowerEmail]
-      + |config :tower, reporters: [TowerEmail, TowerRollbar]
-      """)
-      |> assert_has_patch("config/runtime.exs", """
-      |import Config
-      |
-      + |if config_env() == :prod do
-      + |  config :tower_rollbar,
-      + |    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-      + |    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
-      + |end
-      + |
-      """)
+      |> assert_has_patch(
+        "config/config.exs",
+        """
+        |import Config
+        |
+        - |config :tower, reporters: [TowerEmail]
+        + |config :tower, reporters: [TowerEmail, TowerRollbar]
+        """
+      )
+      |> assert_has_patch(
+        "config/runtime.exs",
+        """
+        |import Config
+        |
+        + |if config_env() == :prod do
+        + |  config :tower_rollbar,
+        + |    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+        + |    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+        + |end
+        + |
+        """
+      )
     end
 
     test "modifies existing tower configs if config_env() == :prod block exists" do
@@ -71,22 +83,28 @@ if Code.ensure_loaded?(Tower.Igniter) do
         }
       )
       |> Igniter.compose_task("tower_rollbar.install", [])
-      |> assert_has_patch("config/config.exs", """
-      |import Config
-      |
-      - |config :tower, reporters: [TowerEmail]
-      + |config :tower, reporters: [TowerEmail, TowerRollbar]
-      """)
-      |> assert_has_patch("config/runtime.exs", """
-      |if config_env() == :prod do
-      |  IO.puts("hello")
-      + |
-      + |  config :tower_rollbar,
-      + |    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-      + |    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
-      |end
-      |
-      """)
+      |> assert_has_patch(
+        "config/config.exs",
+        """
+        |import Config
+        |
+        - |config :tower, reporters: [TowerEmail]
+        + |config :tower, reporters: [TowerEmail, TowerRollbar]
+        """
+      )
+      |> assert_has_patch(
+        "config/runtime.exs",
+        """
+        |if config_env() == :prod do
+        |  IO.puts("hello")
+        + |
+        + |  config :tower_rollbar,
+        + |    access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+        + |    environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
+        |end
+        |
+        """
+      )
     end
 
     test "does not modify existing tower_rollbar configs if config_env() == :prod block exists" do
