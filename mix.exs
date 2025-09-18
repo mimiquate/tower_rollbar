@@ -42,9 +42,9 @@ defmodule TowerRollbar.MixProject do
   defp deps do
     [
       {
-        :tower, "~> 0.7.1 or ~> 0.8.0",
-        github: "mimiquate/tower",
-        branch: "tower-igniter-add-reporter-config"
+        :tower,
+        "~> 0.7.1 or ~> 0.8.0",
+        github: "mimiquate/tower", branch: "tower-igniter-add-reporter-config"
       },
       {:plug, "~> 1.14"},
 
