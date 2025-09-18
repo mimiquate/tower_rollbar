@@ -17,18 +17,7 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
 
     @impl Igniter.Mix.Task
     def info(_argv, _composing_task) do
-      %Igniter.Mix.Task.Info{
-        group: :tower,
-        adds_deps: [],
-        installs: [],
-        example: @example,
-        positional: [],
-        composes: [],
-        schema: [],
-        defaults: [],
-        aliases: [],
-        required: []
-      }
+      %Igniter.Mix.Task.Info{group: :tower, example: @example}
     end
 
     @impl Igniter.Mix.Task
