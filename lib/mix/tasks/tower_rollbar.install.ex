@@ -23,8 +23,8 @@ if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
     @impl Igniter.Mix.Task
     def igniter(igniter) do
       igniter
-      |> Tower.Igniter.add_reporter_to_config(TowerRollbar)
-      |> Tower.Igniter.add_reporter_config(
+      |> Tower.Igniter.add_reporter(
+        TowerRollbar,
         :tower_rollbar,
         access_token: ~s[System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN")],
         environment: ~s[System.get_env("DEPLOYMENT_ENV", to_string(config_env()))]
