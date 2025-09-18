@@ -1,4 +1,6 @@
-if Code.ensure_loaded?(Igniter) && Code.ensure_loaded?(Tower.Igniter) do
+if Code.ensure_loaded?(Igniter) and
+     Code.ensure_loaded?(Tower.Igniter) and
+     function_exported?(Tower.Igniter, :add_reporter, 4) do
   defmodule Mix.Tasks.TowerRollbar.Install do
     @example "mix igniter.install tower_rollbar"
 
@@ -52,7 +54,7 @@ else
     @impl Mix.Task
     def run(_argv) do
       Mix.shell().error("""
-      The task 'tower_rollbar.install' requires igniter and tower > 0.8.3. Please install igniter or update tower and try again.
+      The task 'tower_rollbar.install' requires igniter and tower >= 0.8.4. Please install igniter or update tower and try again.
 
       For more information, see: https://hexdocs.pm/igniter/readme.html#installation
       """)
