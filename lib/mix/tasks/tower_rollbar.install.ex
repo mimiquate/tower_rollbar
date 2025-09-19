@@ -1,6 +1,6 @@
 if Code.ensure_loaded?(Igniter) and
      Code.ensure_loaded?(Tower.Igniter) and
-     function_exported?(Tower.Igniter, :configure_reporter, 4) do
+     function_exported?(Tower.Igniter, :runtime_configure_reporter, 3) do
   defmodule Mix.Tasks.TowerRollbar.Install do
     @example "mix igniter.install tower_rollbar"
 
@@ -25,8 +25,8 @@ if Code.ensure_loaded?(Igniter) and
     @impl Igniter.Mix.Task
     def igniter(igniter) do
       igniter
-      |> Tower.Igniter.configure_reporter(
-        TowerRollbar,
+      |> Tower.Igniter.reporters_list_append(TowerRollbar)
+      |> Tower.Igniter.runtime_configure_reporter(
         :tower_rollbar,
         access_token: ~s[System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN")],
         environment: ~s[System.get_env("DEPLOYMENT_ENV", to_string(config_env()))]
