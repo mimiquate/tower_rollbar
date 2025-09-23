@@ -19,11 +19,9 @@ if Code.ensure_loaded?(Tower.Igniter) do
         """
         import Config
 
-        if config_env() == :prod do
-          config :tower_rollbar,
-            access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
-            environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
-        end
+        config :tower_rollbar,
+          access_token: System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN"),
+          environment: System.get_env("DEPLOYMENT_ENV", to_string(config_env()))
         """
       )
     end

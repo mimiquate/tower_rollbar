@@ -28,9 +28,13 @@ if Code.ensure_loaded?(Igniter) and
       |> Tower.Igniter.reporters_list_append(TowerRollbar)
       |> Tower.Igniter.runtime_configure_reporter(
         :tower_rollbar,
-        access_token: ~s[System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN")],
-        environment: ~s[System.get_env("DEPLOYMENT_ENV", to_string(config_env()))]
+        access_token: code_value(~s[System.get_env("ROLLBAR_SERVER_ACCESS_TOKEN")]),
+        environment: code_value(~s[System.get_env("DEPLOYMENT_ENV", to_string(config_env()))])
       )
+    end
+
+    defp code_value(value) do
+      {:code, Sourceror.parse_string!(value)}
     end
   end
 else
