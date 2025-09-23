@@ -41,11 +41,7 @@ defmodule TowerRollbar.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {
-        :tower,
-        "~> 0.7.1 or ~> 0.8.0",
-        github: "mimiquate/tower"
-      },
+      {:tower, "~> 0.7.1 or ~> 0.8.0"},
       {:plug, "~> 1.14"},
 
       # Optional
