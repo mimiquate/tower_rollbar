@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.5] - 2025-09-26
+
+### Added
+
+- New `mix tower_rollbar.install` task.
+
 ## [0.6.4] - 2025-08-23
 
 ### Fixed
@@ -97,6 +103,7 @@ automatically.
 
 - Updates dependency to `{:tower, "~> 0.4.0"}`.
 
+[0.6.5]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.4...v0.6.5/
 [0.6.4]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.3...v0.6.4/
 [0.6.3]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.2...v0.6.3/
 [0.6.2]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.1...v0.6.2/
