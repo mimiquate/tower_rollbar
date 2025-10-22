@@ -20,7 +20,15 @@ def deps do
 end
 ```
 
-## Usage
+## Setup
+
+### Option A: Automated setup
+
+```sh
+$ mix tower_rollbar.install
+```
+
+### Option B: Manual setup
 
 Ask `Tower` to use the `TowerRollbar` reporter.
 
@@ -56,7 +64,7 @@ any plug call (including Phoenix), Oban job, async task or any other process.
 
 Some HTTP request data will be included in the report if a `Plug.Conn` is available when handling the error.
 
-### Manual reporting
+## Manual reporting
 
 You can manually report errors just by informing `Tower` about any manually handled errors, throws or abnormal exits.
 
