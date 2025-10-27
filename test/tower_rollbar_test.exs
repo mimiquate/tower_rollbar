@@ -619,7 +619,7 @@ defmodule TowerRollbarTest do
                     "pid" => "#PID<" <> _,
                     "port" => "#Port<" <> _,
                     "ref" => "#Reference<" <> _,
-                    "tuple" => "{:one, :two}"
+                    "{:one, :two}" => "{:three, :four}"
                   }
                 }
               }
@@ -638,11 +638,11 @@ defmodule TowerRollbarTest do
         :info,
         "something",
         metadata: %{
-          function: fn x -> x end,
-          pid: self(),
-          port: hd(Port.list()),
-          ref: make_ref(),
-          tuple: {:one, :two}
+          :function => fn x -> x end,
+          :pid => self(),
+          :port => hd(Port.list()),
+          :ref => make_ref(),
+          {:one, :two} => {:three, :four}
         }
       )
     end)
