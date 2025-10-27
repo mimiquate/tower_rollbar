@@ -592,6 +592,64 @@ defmodule TowerRollbarTest do
     end)
   end
 
+  test "properly reports elixir terms in metadata whithout a JSON native formatting", %{
+    test_server: test_server
+  } do
+    waiting_for(fn done ->
+      TestServer.add(
+        test_server,
+        "/item",
+        via: :post,
+        to: fn conn ->
+          {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+          assert(
+            %{
+              "data" => %{
+                "environment" => "test",
+                "level" => "info",
+                "body" => %{
+                  "message" => %{
+                    "body" => "something"
+                  }
+                },
+                "custom" => %{
+                  "metadata" => %{
+                    "function" => "#Function<" <> _,
+                    "pid" => "#PID<" <> _,
+                    "port" => ["#Port<" <> _ | _],
+                    "ref" => "#Reference<" <> _,
+                    "{:one, :two}" => "{:three, :four}",
+                    "keyword" => ["{:a, #PID<" <> _, "{:b, #PID<" <> _]
+                  }
+                }
+              }
+            } = TowerRollbar.json_module().decode!(body)
+          )
+
+          done.()
+
+          conn
+          |> Plug.Conn.put_resp_content_type("application/json")
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
+        end
+      )
+
+      Tower.report_message(
+        :info,
+        "something",
+        metadata: %{
+          :function => fn x -> x end,
+          :pid => self(),
+          :port => Port.list(),
+          :ref => make_ref(),
+          {:one, :two} => {:three, :four},
+          :keyword => [a: self(), b: self()]
+        }
+      )
+    end)
+  end
+
   defp in_unlinked_process(fun) when is_function(fun, 0) do
     {:ok, pid} = Task.Supervisor.start_link()
 
