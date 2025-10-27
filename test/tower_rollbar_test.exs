@@ -619,7 +619,8 @@ defmodule TowerRollbarTest do
                     "pid" => "#PID<" <> _,
                     "port" => ["#Port<" <> _ | _],
                     "ref" => "#Reference<" <> _,
-                    "{:one, :two}" => "{:three, :four}"
+                    "{:one, :two}" => "{:three, :four}",
+                    "keyword" => ["{:a, #PID<" <> _, "{:b, #PID<" <> _]
                   }
                 }
               }
@@ -642,7 +643,8 @@ defmodule TowerRollbarTest do
           :pid => self(),
           :port => Port.list(),
           :ref => make_ref(),
-          {:one, :two} => {:three, :four}
+          {:one, :two} => {:three, :four},
+          :keyword => [a: self(), b: self()]
         }
       )
     end)
