@@ -178,7 +178,7 @@ defmodule TowerRollbar.Rollbar.Item do
     "type: #{inspect(:os.type())} version: #{inspect(:os.version())}"
   end
 
-  def json_prepare(map) when is_map(map) do
+  defp json_prepare(map) when is_map(map) do
     map
     |> Enum.map(fn {k, v} ->
       {json_prepare(k), json_prepare(v)}
@@ -186,14 +186,14 @@ defmodule TowerRollbar.Rollbar.Item do
     |> Enum.into(%{})
   end
 
-  def json_prepare(list) when is_list(list) do
+  defp json_prepare(list) when is_list(list) do
     list
     |> Enum.map(fn element ->
       json_prepare(element)
     end)
   end
 
-  def json_prepare(value)
+  defp json_prepare(value)
       when is_tuple(value) or
              is_pid(value) or
              is_reference(value) or
@@ -202,5 +202,5 @@ defmodule TowerRollbar.Rollbar.Item do
     inspect(value)
   end
 
-  def json_prepare(value), do: value
+  defp json_prepare(value), do: value
 end
