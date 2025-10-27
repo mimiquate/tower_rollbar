@@ -592,7 +592,9 @@ defmodule TowerRollbarTest do
     end)
   end
 
-  test "reports tuples in metadata", %{test_server: test_server} do
+  test "properly reports elixir terms in metadata whithout a JSON native formatting", %{
+    test_server: test_server
+  } do
     waiting_for(fn done ->
       TestServer.add(
         test_server,
@@ -608,10 +610,18 @@ defmodule TowerRollbarTest do
                 "level" => "info",
                 "body" => %{
                   "message" => %{
-                    "body" => "something interesting happened"
+                    "body" => "something"
                   }
                 },
-                "custom" => %{"metadata" => %{"tuple" => ["one", "two"]}}
+                "custom" => %{
+                  "metadata" => %{
+                    "function" => "#Function<" <> _,
+                    "pid" => "#PID<" <> _,
+                    "port" => "#Port<" <> _,
+                    "ref" => "#Reference<" <> _,
+                    "tuple" => "{:one, :two}"
+                  }
+                }
               }
             } = TowerRollbar.json_module().decode!(body)
           )
@@ -626,8 +636,14 @@ defmodule TowerRollbarTest do
 
       Tower.report_message(
         :info,
-        "something interesting happened",
-        metadata: %{tuple: {:one, :two}}
+        "something",
+        metadata: %{
+          function: fn x -> x end,
+          pid: self(),
+          port: hd(Port.list()),
+          ref: make_ref(),
+          tuple: {:one, :two}
+        }
       )
     end)
   end
