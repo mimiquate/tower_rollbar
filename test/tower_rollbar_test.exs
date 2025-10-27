@@ -617,7 +617,7 @@ defmodule TowerRollbarTest do
                   "metadata" => %{
                     "function" => "#Function<" <> _,
                     "pid" => "#PID<" <> _,
-                    "port" => "#Port<" <> _,
+                    "port" => ["#Port<" <> _ | _],
                     "ref" => "#Reference<" <> _,
                     "{:one, :two}" => "{:three, :four}"
                   }
@@ -640,7 +640,7 @@ defmodule TowerRollbarTest do
         metadata: %{
           :function => fn x -> x end,
           :pid => self(),
-          :port => hd(Port.list()),
+          :port => Port.list(),
           :ref => make_ref(),
           {:one, :two} => {:three, :four}
         }

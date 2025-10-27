@@ -186,6 +186,13 @@ defmodule TowerRollbar.Rollbar.Item do
     |> Enum.into(%{})
   end
 
+  def json_prepare(list) when is_list(list) do
+    list
+    |> Enum.map(fn element ->
+      json_prepare(element)
+    end)
+  end
+
   def json_prepare(value)
       when is_tuple(value) or
              is_pid(value) or
