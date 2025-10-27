@@ -592,6 +592,46 @@ defmodule TowerRollbarTest do
     end)
   end
 
+  test "reports tuples in metadata", %{test_server: test_server} do
+    waiting_for(fn done ->
+      TestServer.add(
+        test_server,
+        "/item",
+        via: :post,
+        to: fn conn ->
+          {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+          assert(
+            %{
+              "data" => %{
+                "environment" => "test",
+                "level" => "info",
+                "body" => %{
+                  "message" => %{
+                    "body" => "something interesting happened"
+                  }
+                },
+                "custom" => %{"metadata" => %{"tuple" => ["one", "two"]}}
+              }
+            } = TowerRollbar.json_module().decode!(body)
+          )
+
+          done.()
+
+          conn
+          |> Plug.Conn.put_resp_content_type("application/json")
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
+        end
+      )
+
+      Tower.report_message(
+        :info,
+        "something interesting happened",
+        metadata: %{tuple: {:one, :two}}
+      )
+    end)
+  end
+
   defp in_unlinked_process(fun) when is_function(fun, 0) do
     {:ok, pid} = Task.Supervisor.start_link()
 
