@@ -194,11 +194,11 @@ defmodule TowerRollbar.Rollbar.Item do
   end
 
   defp json_prepare(value)
-      when is_tuple(value) or
-             is_pid(value) or
-             is_reference(value) or
-             is_port(value) or
-             is_function(value) do
+       when is_tuple(value) or
+              is_pid(value) or
+              is_reference(value) or
+              is_port(value) or
+              is_function(value) do
     inspect(value)
   end
 
