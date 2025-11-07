@@ -178,6 +178,8 @@ defmodule TowerRollbar.Rollbar.Item do
     "type: #{inspect(:os.type())} version: #{inspect(:os.version())}"
   end
 
+  defp json_prepare(struct) when is_struct(struct), do: struct
+
   defp json_prepare(map) when is_map(map) do
     map
     |> Enum.map(fn {k, v} ->
