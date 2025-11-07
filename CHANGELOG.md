@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.7] - 2025-11-07
+
+### Fixed
+
+- Don't crash when reporting a struct in `Tower.Event.metadata` (#97)
+
 ## [0.6.6] - 2025-10-28
 
 ### Fixed
@@ -109,6 +115,7 @@ automatically.
 
 - Updates dependency to `{:tower, "~> 0.4.0"}`.
 
+[0.6.7]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.6...v0.6.7/
 [0.6.6]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.5...v0.6.6/
 [0.6.5]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.4...v0.6.5/
 [0.6.4]: https://github.com/mimiquate/tower_rollbar/compare/v0.6.3...v0.6.4/
