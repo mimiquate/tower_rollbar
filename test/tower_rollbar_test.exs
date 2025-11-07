@@ -620,7 +620,8 @@ defmodule TowerRollbarTest do
                     "port" => ["#Port<" <> _ | _],
                     "ref" => "#Reference<" <> _,
                     "{:one, :two}" => "{:three, :four}",
-                    "keyword" => ["{:a, #PID<" <> _, "{:b, #PID<" <> _]
+                    "keyword" => ["{:a, #PID<" <> _, "{:b, #PID<" <> _],
+                    "struct_with_json_impl" => "2000-01-01"
                   }
                 }
               }
@@ -644,7 +645,8 @@ defmodule TowerRollbarTest do
           :port => Port.list(),
           :ref => make_ref(),
           {:one, :two} => {:three, :four},
-          :keyword => [a: self(), b: self()]
+          :keyword => [a: self(), b: self()],
+          :struct_with_json_impl => %Date{year: 2000, month: 01, day: 01}
         }
       )
     end)
