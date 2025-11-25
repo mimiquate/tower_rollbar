@@ -25,7 +25,7 @@ jobs:
             erlang: '25.3.2.21'
             blend: plug_1_14
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/cache@v4
         if: ${{ ! matrix.lint }}
         with:
