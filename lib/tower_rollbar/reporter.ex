@@ -3,12 +3,23 @@ defmodule TowerRollbar.Reporter do
 
   alias TowerRollbar.Rollbar
 
+  require Logger
+
   def report_event(%Tower.Event{} = event) do
     if Rollbar.Client.enabled?() do
       item = Rollbar.Item.from_event(event)
 
       async(fn ->
-        {:ok, _} = Rollbar.Client.post("/item", item)
+        Rollbar.Client.post("/item", item)
+        |> case do
+          {:error, reason} = response ->
+            Logger.warning("[TowerRollbar] Failed to report event to Rollbar: #{inspect(reason)}")
+
+            response
+
+          response ->
+            response
+        end
       end)
     else
       IO.puts("TowerRollbar NOT enabled, ignoring...")
