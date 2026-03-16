@@ -7,10 +7,10 @@ defmodule TowerRollbarTest do
   setup do
     {:ok, test_server} = TestServer.start()
 
-    Application.put_env(:tower, :reporters, [TowerRollbar])
-    Application.put_env(:tower_rollbar, :rollbar_base_url, TestServer.url(test_server))
-    Application.put_env(:tower_rollbar, :environment, :test)
-    Application.put_env(:tower_rollbar, :access_token, "fake-token")
+    put_env(:tower, :reporters, [TowerRollbar])
+    put_env(:tower_rollbar, :rollbar_base_url, TestServer.url(test_server))
+    put_env(:tower_rollbar, :environment, :test)
+    put_env(:tower_rollbar, :access_token, "fake-token")
 
     {:ok, test_server: test_server}
   end
@@ -652,6 +652,67 @@ defmodule TowerRollbarTest do
     end)
   end
 
+  test "logs rollbar client request error message", %{test_server: test_server} do
+    waiting_for(fn done ->
+      TestServer.add(
+        test_server,
+        "/item",
+        via: :post,
+        to: fn conn ->
+          done.()
+
+          conn
+          |> Plug.Conn.put_resp_content_type("application/json")
+          |> Plug.Conn.resp(
+            422,
+            TowerRollbar.json_module().encode!(response_error("Item too large"))
+          )
+        end
+      )
+
+      assert capture_log(fn ->
+               assert :ok = Tower.report_message(:info, "something interesting happened")
+
+               Process.sleep(100)
+             end) =~
+               ~r/\[TowerRollbar\] Error reporting event to Rollbar: "Item too large"/
+    end)
+  end
+
+  test "logs rollbar's internal server error", %{test_server: test_server} do
+    waiting_for(fn done ->
+      TestServer.add(
+        test_server,
+        "/item",
+        via: :post,
+        to: fn conn ->
+          done.()
+
+          conn
+          |> Plug.Conn.put_resp_content_type("application/json")
+          |> Plug.Conn.resp(500, TowerRollbar.json_module().encode!(%{}))
+        end
+      )
+
+      assert capture_log(fn ->
+               assert :ok = Tower.report_message(:info, "something interesting happened")
+
+               Process.sleep(100)
+             end) =~
+               ~r/\[TowerRollbar\] Error reporting event to Rollbar: %{}/
+    end)
+  end
+
+  test "logs rollbar's network error" do
+    put_env(:tower_rollbar, :rollbar_base_url, "")
+
+    assert capture_log(fn ->
+             assert :ok = Tower.report_message(:info, "something interesting happened")
+
+             Process.sleep(100)
+           end) =~ ~r/\[TowerRollbar\] Error reporting event to Rollbar: {:no_scheme}/
+  end
+
   defp in_unlinked_process(fun) when is_function(fun, 0) do
     {:ok, pid} = Task.Supervisor.start_link()
 
@@ -671,5 +732,26 @@ defmodule TowerRollbarTest do
     end)
 
     assert_receive({^ref, :sent}, 500)
+  end
+
+  defp put_env(app, key, value) do
+    original_value = Application.get_env(app, key)
+    Application.put_env(app, key, value)
+
+    on_exit(fn ->
+      if original_value == nil do
+        Application.delete_env(app, key)
+      else
+        Application.put_env(app, key, original_value)
+      end
+    end)
+  end
+
+  # https://docs.rollbar.com/reference/create-item#response-format
+  defp response_error(message) do
+    %{
+      err: 1,
+      message: message
+    }
   end
 end
