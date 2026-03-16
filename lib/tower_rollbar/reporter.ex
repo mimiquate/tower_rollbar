@@ -11,22 +11,22 @@ defmodule TowerRollbar.Reporter do
       async(fn ->
         Rollbar.Client.post("/item", item)
         |> case do
-          {:error, _} = response ->
-            Logger.error("Network error")
-            response
+          {:error, reason} ->
+            log_report_error(reason)
 
-          {:ok, {{_, status_code, _}, _, body}} when status_code in 400..599 ->
+          {:ok, {status_code, _, body}} when status_code in 400..599 ->
             body
-            |> TowerRollbar.json_module().decode!()
+            |> TowerRollbar.json_module().decode()
             |> case do
-              %{"err" => 1, "message" => message} ->
-                Logger.error(message)
+              {:ok, %{"err" => 1, "message" => message}} ->
+                log_report_error(message)
 
-              _ ->
-                Logger.error("Error")
+              {:ok, decoded_body} ->
+                log_report_error(decoded_body)
+
+              {:error, _reason} ->
+                log_report_error(body)
             end
-
-            nil
 
           _ ->
             nil
@@ -40,5 +40,11 @@ defmodule TowerRollbar.Reporter do
   defp async(fun) do
     Tower.TaskSupervisor
     |> Task.Supervisor.start_child(fun)
+  end
+
+  defp log_report_error(reason) do
+    Logger.error(
+      "[TowerRollbar] Error reporting event to Rollbar with reason: #{inspect(reason)}"
+    )
   end
 end
