@@ -44,7 +44,7 @@ defmodule TowerRollbar.Reporter do
 
   defp log_report_error(reason) do
     Logger.error(
-      "[TowerRollbar] Error reporting event to Rollbar with reason: #{inspect(reason)}"
+      "[TowerRollbar] Error reporting event to Rollbar: #{inspect(reason)}"
     )
   end
 end

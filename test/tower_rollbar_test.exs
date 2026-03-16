@@ -675,7 +675,7 @@ defmodule TowerRollbarTest do
 
                Process.sleep(100)
              end) =~
-               ~r/\[TowerRollbar\] Error reporting event to Rollbar with reason: "Item too large"/
+               ~r/\[TowerRollbar\] Error reporting event to Rollbar: "Item too large"/
     end)
   end
 
@@ -699,7 +699,7 @@ defmodule TowerRollbarTest do
 
                Process.sleep(100)
              end) =~
-               ~r/\[TowerRollbar\] Error reporting event to Rollbar with reason: %{}/
+               ~r/\[TowerRollbar\] Error reporting event to Rollbar: %{}/
     end)
   end
 
@@ -710,7 +710,7 @@ defmodule TowerRollbarTest do
              assert :ok = Tower.report_message(:info, "something interesting happened")
 
              Process.sleep(100)
-           end) =~ ~r/\[TowerRollbar\] Error reporting event to Rollbar with reason: {:no_scheme}/
+           end) =~ ~r/\[TowerRollbar\] Error reporting event to Rollbar: {:no_scheme}/
   end
 
   defp in_unlinked_process(fun) when is_function(fun, 0) do
