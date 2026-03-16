@@ -14,7 +14,7 @@ defmodule TowerRollbar.Reporter do
           {:error, reason} ->
             log_report_error(reason)
 
-          {:ok, {status_code, _, body}} when status_code in 400..599 ->
+          {:ok, {status_code, _headers, body}} when status_code in 400..599 ->
             body
             |> TowerRollbar.json_module().decode()
             |> case do
