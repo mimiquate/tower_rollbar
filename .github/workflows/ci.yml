@@ -28,7 +28,7 @@ jobs:
             blend: plug_1_14
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/cache@v5
+      - uses: actions/cache@v6
         if: ${{ ! matrix.lint }}
         with:
           path: |
