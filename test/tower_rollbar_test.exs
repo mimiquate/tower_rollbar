@@ -591,6 +591,56 @@ defmodule TowerRollbarTest do
     end)
   end
 
+  test "logs a warning and still reports item when customize_item_data_mod_fun is invalid", %{
+    test_server: test_server
+  } do
+    put_env(
+      :tower_rollbar,
+      :customize_item_data_mod_fun,
+      {CustomTowerRollbarItemData, :undefined}
+    )
+
+    waiting_for(fn done ->
+      TestServer.add(
+        test_server,
+        "/item",
+        via: :post,
+        to: fn conn ->
+          {:ok, body, conn} = Plug.Conn.read_body(conn)
+
+          assert(
+            %{
+              "data" =>
+                %{
+                  "body" => %{
+                    "message" => %{"body" => "an error message"}
+                  }
+                } = data
+            } = TowerRollbar.json_module().decode!(body)
+          )
+
+          # the item was not modified (because the config was bad)
+          refute Map.has_key?(data, "code_version")
+
+          done.()
+
+          conn
+          |> Plug.Conn.put_resp_content_type("application/json")
+          |> Plug.Conn.resp(200, TowerRollbar.json_module().encode!(%{"ok" => true}))
+        end
+      )
+
+      assert capture_log(fn ->
+               assert :ok = Tower.report_message(:info, "an error message")
+
+               Process.sleep(100)
+             end) =~
+               "[TowerRollbar] Ignoring invalid :customize_item_data_mod_fun config: " <>
+                 "expected {Module, :function} with Module.function/2 defined, " <>
+                 "got: {TowerRollbarTest.CustomTowerRollbarItemData, :undefined}"
+    end)
+  end
+
   test "reports throw with Bandit", %{test_server: test_server} do
     # An ephemeral port hopefully not being in the host running this code
     plug_port = 51111

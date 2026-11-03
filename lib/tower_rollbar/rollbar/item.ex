@@ -1,6 +1,8 @@
 defmodule TowerRollbar.Rollbar.Item do
   @moduledoc false
 
+  require Logger
+
   @reported_request_headers ["user-agent"]
 
   def from_event(%Tower.Event{kind: :error, reason: exception, stacktrace: stacktrace} = event) do
@@ -133,12 +135,30 @@ defmodule TowerRollbar.Rollbar.Item do
     }
   end
 
-  defp maybe_customize_item_data(item, options, {module, function}) do
-    apply(module, function, [item, options])
+  defp maybe_customize_item_data(item, options, {module, function} = mod_fun)
+       when is_atom(module) and is_atom(function) do
+    if Code.ensure_loaded?(module) and function_exported?(module, function, 2) do
+      apply(module, function, [item, options])
+    else
+      warn_invalid_customize_item_data(mod_fun)
+      item
+    end
   end
 
-  defp maybe_customize_item_data(item, _, _) do
+  defp maybe_customize_item_data(item, _, nil) do
     item
+  end
+
+  defp maybe_customize_item_data(item, _, mod_fun) do
+    warn_invalid_customize_item_data(mod_fun)
+    item
+  end
+
+  defp warn_invalid_customize_item_data(mod_fun) do
+    Logger.warning(
+      "[TowerRollbar] Ignoring invalid :customize_item_data_mod_fun config: " <>
+        "expected {Module, :function} with Module.function/2 defined, got: #{inspect(mod_fun)}"
+    )
   end
 
   defp frames(stacktrace) do
