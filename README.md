@@ -15,7 +15,7 @@ The package can be installed by adding `tower_rollbar` to your list of dependenc
 ```elixir
 def deps do
   [
-    {:tower_rollbar, "~> 0.6.8"}
+    {:tower_rollbar, "~> 0.7.0"}
   ]
 end
 ```
@@ -82,6 +82,44 @@ end
 ```
 
 More details on https://hexdocs.pm/tower/Tower.html#module-manual-reporting.
+
+## Customization
+
+### Modify the final item data in the POST to Rollbar
+
+The final item data can be modified by your application. If you need this, create a module that has a function
+accepting two parameters: `item` and `options`:
+
+```elixir
+defmodule MyApp.CustomTowerRollbarItemData do
+  def call(item, options) do
+    item
+    |> Map.put(...)
+    |> Map.put(...)
+  end
+end
+```
+
+```elixir
+# config/config.exs
+
+config :tower_rollbar, :customize_item_data_mod_fun, {MyApp.CustomTowerRollbarItemData, :call}
+```
+
+Ensure your modifications conform to the
+[Rollbar Data Format](https://docs.rollbar.com/reference/create-item#data-format).
+
+The `item` is a map that looks like that Rollbar Data Format.
+
+The `options` is a keyword list with five keys:
+
+* `custom`
+* `person`
+* `plug_conn`
+* `timestamp`
+* `uuid`
+
+See `TowerRollbar.Rollbar.Item.options_from_event/1` for details.
 
 ## License
 

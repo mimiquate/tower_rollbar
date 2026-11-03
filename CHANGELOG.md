@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-10-29
+
+### Added
+
+- New optional configuration: `customize_item_data_mod_fun`. If present and a tuple: `{Module, :function}`, will
+  call the function on that Module with two arguments: `item`, `options`. This function returns a modified `item` map
+  that is posted to Rollbar.
+
 ## [0.6.8] - 2026-03-16
 
 ### Fixed
